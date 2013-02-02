@@ -19,7 +19,7 @@ class DHasName {
         ~DHasName() { }
 
         void SetName(std::string name) {
-            fName = std::string(name);
+            fName = name;
         }
 
         std::string GetName() const {
@@ -177,7 +177,7 @@ class DSampleTree : public DHasName, public DHasTitle,
         virtual void Project(std::string varexp, TH1 *h) const {
             std::string selection = (GetCut() + std::string("*") +
                     GetWeight() + std::string("*") +
-                    std::string(GetCrossSectionString()));
+                    GetCrossSectionString());
 
             GetTree()->Project(h->GetName(), varexp.c_str(), selection.c_str());
             
