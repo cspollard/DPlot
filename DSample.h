@@ -9,154 +9,14 @@
 #include <TTree.h>
 #include <TChain.h>
 #include <TH1.h>
-
-class DHasName {
-    protected:
-        std::string fName;
-
-    public:
-        DHasName(std::string name) : fName(name) { }
-        ~DHasName() { }
-
-        void SetName(std::string name) {
-            fName = name;
-        }
-
-        std::string GetName() const {
-            return fName;
-        }
-};
-
-class DHasTitle {
-    protected:
-        std::string fTitle;
-
-    public:
-        DHasTitle(std::string title) : fTitle(title) { }
-        ~DHasTitle() { }
-
-        void SetTitle(std::string title) {
-            fTitle = title;
-        }
-
-        std::string GetTitle() const {
-            return fTitle;
-        }
-};
-
-class DHasFile {
-    protected:
-        TFile *fFile;
-
-    public:
-        DHasFile(TFile *file) : fFile(file) { }
-        ~DHasFile() { }
-
-        void SetFile(TFile *file) {
-            fFile = file;
-        }
-
-        TFile *GetFile() const {
-            return fFile;
-        }
-};
-
-class DHasTree {
-    protected:
-        TTree *fTree;
-
-    public:
-        DHasTree(TTree *tree) : fTree(tree) { }
-        ~DHasTree() { }
-
-        void SetTree(TTree *tree) {
-            fTree = tree;
-        }
-
-        TTree *GetTree() const {
-            return fTree;
-        }
-};
-
-class DHasWeight {
-    protected:
-        std::string fWeight;
-
-    public:
-        DHasWeight(std::string wgt) : fWeight(wgt) { }
-        ~DHasWeight() { }
-
-        void SetWeight(std::string wgt) {
-            fWeight = wgt;
-        }
-
-        std::string GetWeight() const {
-            return fWeight;
-        }
-};
-
-class DHasCut {
-    protected:
-        std::string fCut;
-
-    public:
-        DHasCut(std::string cut) : fCut(cut) { }
-        ~DHasCut() { }
-
-        void SetCut(std::string cut) {
-            fCut = cut;
-        }
-
-        std::string GetCut() const {
-            return fCut;
-        }
-};
-
-class DHasCrossSection {
-    protected:
-        double fCrossSection;
-
-    public:
-        DHasCrossSection(double xsec) : fCrossSection(xsec) { }
-        ~DHasCrossSection() { }
-
-        void SetCrossSection(double xsec) {
-            fCrossSection = xsec;
-        }
-
-        double GetCrossSection() const {
-            return fCrossSection;
-        }
-
-        std::string GetCrossSectionString() const {
-            std::ostringstream o("");
-            o << fCrossSection;
-            return o.str();
-        }
-};
-
-class DHasKFactor {
-    protected:
-        double fKFactor;
-
-    public:
-        DHasKFactor(double kfac) : fKFactor(kfac) { }
-        ~DHasKFactor() { }
-
-        void SetKFactor(double kfac) {
-            fKFactor = kfac;
-        }
-
-        double GetKFactor() const {
-            return fKFactor;
-        }
-};
-
-class DAHasProject {
-    public:
-        virtual void Project(std::string varexp, TH1 *h) const = 0;
-};
-
+#include "DHasName.h"
+#include "DHasTitle.h"
+#include "DHasTree.h"
+#include "DHasWeight.h"
+#include "DHasCut.h"
+#include "DHasCrossSection.h"
+#include "DHasKFactor.h"
+#include "DAHasProject.h"
 
 class DSampleTree : public DHasName, public DHasTitle,
     public DHasTree, public DHasCrossSection, public DHasKFactor,
@@ -185,20 +45,6 @@ class DSampleTree : public DHasName, public DHasTitle,
         }
 };
 
-
-class DSampleFile : public DHasFile, public DSampleTree {
-    public:
-        DSampleFile(std::string name, std::string title, TFile *f,
-                std::string treename, double xsec=1.0,
-                double kfactor=1.0, std::string cut="1.0",
-                std::string weight="1.0") :
-            DHasFile(f),
-            DSampleTree(name, title,
-                    (TTree *) f->Get(treename.c_str()),
-                    xsec, kfactor, cut, weight) { }
-
-        ~DSampleFile() { }
-};
 
 
 class DSampleFiles : public DSampleTree {
