@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "DSample.h"
+#include "DSampleTree.h"
 #include "THStack.h"
 #include "TCanvas.h"
 

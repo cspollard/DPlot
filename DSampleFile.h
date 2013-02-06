@@ -1,8 +1,10 @@
 #ifndef __DSampleFile_h__
 #define __DSampleFile_h__
 
+#include <string>
+#include "TFile.h"
 #include "DHasFile.h"
-#include "DSample.h"
+#include "DSampleTree.h"
 
 class DSampleFile : public DHasFile, public DSampleTree {
     public:

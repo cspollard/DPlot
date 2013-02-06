@@ -1,6 +1,8 @@
 #ifndef __DHasCrossSection_h__
 #define __DHasCrossSection_h__
 
+#include <sstream>
+
 class DHasCrossSection {
     protected:
         double fCrossSection;

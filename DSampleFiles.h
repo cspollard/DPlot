@@ -1,6 +1,8 @@
 #ifndef __DSampleFiles_h__
 #define __DSampleFiles_h__
 
+#include <string>
+#include <vector>
 #include "TChain.h"
 #include "DSampleTree.h"
 

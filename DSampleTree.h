@@ -1,14 +1,9 @@
 #ifndef __DSample_h__
 #define __DSample_h__
 
-#include <vector>
 #include <string>
-#include <sstream>
-#include <iostream>
-#include <TFile.h>
-#include <TTree.h>
-#include <TChain.h>
-#include <TH1.h>
+#include "TTree.h"
+#include "TH1.h"
 #include "DHasName.h"
 #include "DHasTitle.h"
 #include "DHasTree.h"
