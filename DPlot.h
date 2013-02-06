@@ -1,23 +1,11 @@
+#ifndef __DPLOT_H__
+#define __DPLOT_H__
+
 #include <string>
 #include <vector>
 #include "DSample.h"
 #include "THStack.h"
 #include "TCanvas.h"
-
-std::string ReForm(const char *varexp) {
-    // I know this is sloooow.
-    size_t i = 0;
-    char c;
-    std::string s;
-    while ((c = varexp[i]) != '\0') {
-        if (!isalnum(c))
-            s += "_";
-        else
-            s += c;
-    }
-
-    return s;
-}
 
 class DHasLumi {
     protected:
@@ -112,3 +100,5 @@ class DPlot : public DHasName, public DHasTitle, public DHasLumi,
             THStack *Plot(int nbins, double low, double high) const;
             THStack *Plot(int nbins, double bins[]) const;
 };
+
+#endif
