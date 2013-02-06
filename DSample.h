@@ -11,7 +11,7 @@
 #include <TH1.h>
 
 class DHasName {
-    private:
+    protected:
         std::string fName;
 
     public:
@@ -28,7 +28,7 @@ class DHasName {
 };
 
 class DHasTitle {
-    private:
+    protected:
         std::string fTitle;
 
     public:
@@ -45,7 +45,7 @@ class DHasTitle {
 };
 
 class DHasFile {
-    private:
+    protected:
         TFile *fFile;
 
     public:
@@ -62,7 +62,7 @@ class DHasFile {
 };
 
 class DHasTree {
-    private:
+    protected:
         TTree *fTree;
 
     public:
@@ -79,7 +79,7 @@ class DHasTree {
 };
 
 class DHasWeight {
-    private:
+    protected:
         std::string fWeight;
 
     public:
@@ -96,7 +96,7 @@ class DHasWeight {
 };
 
 class DHasCut {
-    private:
+    protected:
         std::string fCut;
 
     public:
@@ -113,7 +113,7 @@ class DHasCut {
 };
 
 class DHasCrossSection {
-    private:
+    protected:
         double fCrossSection;
 
     public:
@@ -136,7 +136,7 @@ class DHasCrossSection {
 };
 
 class DHasKFactor {
-    private:
+    protected:
         double fKFactor;
 
     public:
