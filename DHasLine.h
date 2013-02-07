@@ -19,7 +19,7 @@ class DHasLine {
             return fLine;
         }
 
-        void operator | (const DLine &line) {
+        void operator << (const DLine &line) {
             SetLine(line);
             return;
         }

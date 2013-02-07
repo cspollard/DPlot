@@ -19,7 +19,7 @@ class DHasMarker {
             return fMarker;
         }
 
-        void operator | (const DMarker &marker) {
+        void operator << (const DMarker &marker) {
             SetMarker(marker);
             return;
         }

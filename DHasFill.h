@@ -19,7 +19,7 @@ class DHasFill {
             return fFill;
         }
 
-        void operator | (const DFill &fill) {
+        void operator << (const DFill &fill) {
             SetFill(fill);
             return;
         }

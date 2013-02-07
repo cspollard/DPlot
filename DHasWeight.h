@@ -18,6 +18,11 @@ class DHasWeight {
         DWeight GetWeight() const {
             return fWeight;
         }
+
+        void operator << (const DWeight &weight) {
+            SetWeight(weight);
+            return;
+        }
 };
 
 #endif
