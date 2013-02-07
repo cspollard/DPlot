@@ -1,19 +1,21 @@
 #ifndef __DHasWeight_h__
 #define __DHasWeight_h__
 
+#include "DWeight.h"
+
 class DHasWeight {
     protected:
-        std::string fWeight;
+        DWeight fWeight;
 
     public:
-        DHasWeight(std::string wgt) : fWeight("(" + wgt + ")") { }
+        DHasWeight(const DWeight &weight=DWeight()) : fWeight(weight) { }
         ~DHasWeight() { }
 
-        void SetWeight(std::string wgt) {
-            fWeight = "(" + wgt + ")";
+        void SetWeight(const DWeight &weight) {
+            fWeight = weight;
         }
 
-        std::string GetWeight() const {
+        DWeight GetWeight() const {
             return fWeight;
         }
 };
