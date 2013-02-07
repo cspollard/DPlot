@@ -18,6 +18,11 @@ class DHasFill {
         DFill *GetFill() const {
             return fFill;
         }
+
+        void operator | (DFill *fill) {
+            SetFill(fill);
+            return;
+        }
 };
 
 #endif

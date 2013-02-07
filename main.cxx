@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "TFile.h"
+#include "TColor.h"
 // #include "DSampleTree.h"
 #include "DSampleFile.h"
 #include "DPlot.h"
@@ -21,10 +22,18 @@ int main(int argc, char *argv[]) {
     samps.push_back(new DSampleTree("e", "e", tin));
     */
 
-    samps.push_back(new DSampleFile("d", "d", fin,
-                "Nominal_one_btag_cut_el_ntuple", 100, 1.5, "el_tight", "wgt"));
-    samps.push_back(new DSampleFile("e", "e", fin,
-                "Nominal_one_btag_cut_el_ntuple"));
+    DSampleFile *d = new DSampleFile("d", "d", fin,
+                "Nominal_one_btag_cut_el_ntuple", 100, 1.5, "el_tight", "wgt");
+
+    d->SetLine(new DLine(kRed, 1, 4));
+
+    DSampleFile *e = new DSampleFile("e", "e", fin,
+                "Nominal_one_btag_cut_el_ntuple");
+
+    e->SetFill(new DFill(kBlue, 1001));
+
+    samps.push_back(d);
+    samps.push_back(e);
 
     DPlot *dp = new DPlot("dp", "dp", 1.0, "el_pt", &samps);
 

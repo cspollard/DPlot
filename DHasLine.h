@@ -18,6 +18,11 @@ class DHasLine {
         DLine *GetLine() const {
             return fLine;
         }
+
+        void operator | (DLine *line) {
+            SetLine(line);
+            return;
+        }
 };
 
 #endif

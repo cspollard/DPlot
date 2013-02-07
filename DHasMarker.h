@@ -18,6 +18,12 @@ class DHasMarker {
         DMarker *GetMarker() const {
             return fMarker;
         }
+
+        void operator | (DMarker *marker) {
+            SetMarker(marker);
+            return;
+        }
 };
+
 
 #endif
