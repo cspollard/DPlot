@@ -8,14 +8,14 @@
 #include "DHasTitle.h"
 #include "DHasTree.h"
 #include "DHasWeight.h"
-#include "DHasCrossSection.h"
+#include "DHasXSec.h"
 #include "DHasMarker.h"
 #include "DHasFill.h"
 #include "DHasLine.h"
 #include "DAHasProject.h"
 
 class DSampleTree : public DHasName, public DHasTitle,
-    public DHasTree, public DHasCrossSection,
+    public DHasTree, public DHasXSec,
     public DHasWeight, public DHasMarker, public DHasFill,
     public DHasLine, public DAHasProject {
 
@@ -26,15 +26,15 @@ class DSampleTree : public DHasName, public DHasTitle,
             DHasName(name),
             DHasTitle(title),
             DHasTree(tree),
-            DHasCrossSection(xsec),
+            DHasXSec(xsec),
             DHasWeight(weight),
             DHasMarker(marker),
             DHasFill(fill),
             DHasLine(line) { }
 
         virtual void Project(std::string varexp, TH1 *h) const {
-            std::string wgt = GetWeight() + "*" +
-                    GetCrossSectionString();
+            std::string wgt = (std::string) GetWeight() + "*" +
+                    GetXSecString();
 
             GetTree()->Project(h->GetName(), varexp.c_str(), wgt.c_str());
             

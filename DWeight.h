@@ -8,8 +8,13 @@ class DWeight {
         std::string fWeight;
 
     public:
-        DWeight(std::string weight="1.0") : fWeight(weight) { }
+        DWeight(std::string weight="1.0") :
+            fWeight("(" + weight + ")") { }
         ~DWeight() { }
+
+        operator std::string () {
+            return fWeight;
+        }
 };
 
 #endif

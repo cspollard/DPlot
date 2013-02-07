@@ -23,19 +23,20 @@ int main(int argc, char *argv[]) {
     */
 
     DSampleFile *d = new DSampleFile("d", "d", fin,
-                "Nominal_one_btag_cut_el_ntuple", 100, 1.5, "el_tight", "wgt");
+                "Nominal_one_btag_cut_el_ntuple", 100, "el_tight*wgt");
 
     d->SetLine(DLine(kRed, 1, 4));
 
-    DSampleFile *e = new DSampleFile("e", "e", fin,
+    DSampleFile e = DSampleFile("e", "e", fin,
                 "Nominal_one_btag_cut_el_ntuple");
 
     DFill df(kBlue, 1001);
 
-    e->SetFill(df);
+    e | df;
+    e | DLine(kRed, 1, 4);
 
     samps.push_back(d);
-    samps.push_back(e);
+    samps.push_back(&e);
 
     DPlot *dp = new DPlot("dp", "dp", 1.0, "el_pt", &samps);
 
