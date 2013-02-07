@@ -1,5 +1,5 @@
-#ifndef __DSample_h__
-#define __DSample_h__
+#ifndef __DSampleTree_h__
+#define __DSampleTree_h__
 
 #include <string>
 #include "TTree.h"
@@ -30,9 +30,10 @@ class DSampleTree : public DHasName, public DHasTitle,
             DHasWeight(weight) { }
 
         virtual void Project(std::string varexp, TH1 *h) const {
-            std::string selection = (GetCut() + std::string("*") +
-                    GetWeight() + std::string("*") +
-                    GetCrossSectionString());
+            std::string selection = GetCut() + "*" +
+                    GetWeight() + "*" +
+                    GetCrossSectionString() + "*" +
+                    GetKFactorString();
 
             GetTree()->Project(h->GetName(), varexp.c_str(), selection.c_str());
             

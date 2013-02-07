@@ -6,11 +6,11 @@ class DHasWeight {
         std::string fWeight;
 
     public:
-        DHasWeight(std::string wgt) : fWeight(wgt) { }
+        DHasWeight(std::string wgt) : fWeight("(" + wgt + ")") { }
         ~DHasWeight() { }
 
         void SetWeight(std::string wgt) {
-            fWeight = wgt;
+            fWeight = "(" + wgt + ")";
         }
 
         std::string GetWeight() const {

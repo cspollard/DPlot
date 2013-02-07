@@ -1,6 +1,7 @@
 #ifndef __DHasCrossSection_h__
 #define __DHasCrossSection_h__
 
+#include <string>
 #include <sstream>
 
 class DHasCrossSection {

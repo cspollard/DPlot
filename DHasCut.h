@@ -6,11 +6,11 @@ class DHasCut {
         std::string fCut;
 
     public:
-        DHasCut(std::string cut) : fCut(cut) { }
+        DHasCut(std::string cut) : fCut("(" + cut + ")") { }
         ~DHasCut() { }
 
         void SetCut(std::string cut) {
-            fCut = cut;
+            fCut = "(" + cut + ")";
         }
 
         std::string GetCut() const {
