@@ -1,6 +1,8 @@
 #ifndef __DHasName_h__
 #define __DHasName_h__
 
+#include <string>
+
 class DHasName {
     protected:
         std::string fName;

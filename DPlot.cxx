@@ -10,7 +10,11 @@ THStack *DPlot::Plot(int nbins, double bins[]) const {
         s = fSamples->at(ih);
 
         TH1D *htmp = new TH1D((s->GetName() + "_" + fVar).c_str(),
-                (s->GetName() + "_" + fVar).c_str(), nbins, bins);
+                s->GetTitle().c_str(), nbins, bins);
+
+        s->GetMarker()->SetMarker(htmp);
+        s->GetFill()->SetFill(htmp);
+        s->GetLine()->SetLine(htmp);
 
         s->Project(fVar, htmp);
 
