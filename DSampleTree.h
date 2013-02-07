@@ -25,7 +25,7 @@ class DSampleTree : public DHasName, public DHasTitle,
         DSampleTree(std::string name, std::string title, TTree *tree,
                 double xsec=1.0, double kfactor=1.0,
                 std::string cut="1.0", std::string weight="1.0",
-                DMarker *marker=new DMarker(), DFill *fill=new DFill(), DLine *line=new DLine()) :
+                DMarker marker=DMarker(), DFill fill=DFill(), DLine line=DLine()) :
             DHasName(name),
             DHasTitle(title),
             DHasTree(tree),

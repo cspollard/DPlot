@@ -5,25 +5,24 @@
 
 class DHasLine {
     protected:
-        DLine *fLine;
+        DLine fLine;
 
     public:
-        DHasLine(DLine *line) : fLine(line) { }
+        DHasLine(const DLine line) : fLine(line) { }
         ~DHasLine() { }
 
-        void SetLine(DLine *line) {
+        void SetLine(const DLine line) {
             fLine = line;
         }
 
-        DLine *GetLine() const {
+        DLine GetLine() const {
             return fLine;
         }
 
-        void operator | (DLine *line) {
+        void operator | (const DLine &line) {
             SetLine(line);
             return;
         }
 };
 
 #endif
-

@@ -6,3 +6,6 @@ main.o: main.cxx
 
 DPlot.o: DPlot.cxx
 	clang++ -c DPlot.cxx -o DPlot.o `root-config --cflags`
+
+clean:
+	rm *.o main

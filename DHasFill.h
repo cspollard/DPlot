@@ -5,21 +5,21 @@
 
 class DHasFill {
     protected:
-        DFill *fFill;
+        DFill fFill;
 
     public:
-        DHasFill(DFill *fill) : fFill(fill) { }
+        DHasFill(const DFill &fill) : fFill(fill) { }
         ~DHasFill() { }
 
-        void SetFill(DFill *fill) {
+        void SetFill(const DFill &fill) {
             fFill = fill;
         }
 
-        DFill *GetFill() const {
+        DFill GetFill() const {
             return fFill;
         }
 
-        void operator | (DFill *fill) {
+        void operator | (const DFill &fill) {
             SetFill(fill);
             return;
         }

@@ -12,9 +12,9 @@ THStack *DPlot::Plot(int nbins, double bins[]) const {
         TH1D *htmp = new TH1D((s->GetName() + "_" + fVar).c_str(),
                 s->GetTitle().c_str(), nbins, bins);
 
-        s->GetMarker()->SetMarker(htmp);
-        s->GetFill()->SetFill(htmp);
-        s->GetLine()->SetLine(htmp);
+        s->GetMarker().SetMarker(htmp);
+        s->GetFill().SetFill(htmp);
+        s->GetLine().SetLine(htmp);
 
         s->Project(fVar, htmp);
 

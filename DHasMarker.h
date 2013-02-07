@@ -5,21 +5,21 @@
 
 class DHasMarker {
     protected:
-        DMarker *fMarker;
+        DMarker fMarker;
 
     public:
-        DHasMarker(DMarker *marker) : fMarker(marker) { }
+        DHasMarker(const DMarker &marker) : fMarker(marker) { }
         ~DHasMarker() { }
 
-        void SetMarker(DMarker *marker) {
+        void SetMarker(const DMarker &marker) {
             fMarker = marker;
         }
 
-        DMarker *GetMarker() const {
+        DMarker GetMarker() const {
             return fMarker;
         }
 
-        void operator | (DMarker *marker) {
+        void operator | (const DMarker &marker) {
             SetMarker(marker);
             return;
         }
