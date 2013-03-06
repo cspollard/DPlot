@@ -1,15 +1,19 @@
 // main.cxx
 
+#include <iostream>
 #include <vector>
 #include "TFile.h"
 #include "TColor.h"
 // #include "DSampleTree.h"
 #include "DSampleFile.h"
+#include "DSampleGroup.h"
 #include "DPlot.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 2)
         return 0;
+
+    TH1::SetDefaultSumw2();
 
     TFile *fin = new TFile(argv[1]);
 
@@ -26,17 +30,24 @@ int main(int argc, char *argv[]) {
                 "Nominal_one_btag_cut_el_ntuple", 100, "el_tight*wgt");
 
     d->SetLine(DLine(kRed, 1, 4));
+    *d << DLine(kOrange, 1, 4);
 
     DSampleFile e = DSampleFile("e", "e", fin,
                 "Nominal_one_btag_cut_el_ntuple");
 
-    DFill df(kBlue, 1001);
 
-    e | df;
-    e | DLine(kRed, 1, 4);
+    e << DFill(kBlue, 1001);
 
     samps.push_back(d);
     samps.push_back(&e);
+
+    DSampleGroup dg("dg", "g");
+    dg.AddSample(d);
+    // dg.AddSample((DSampleTree *) &e);
+    dg << DFill(kGreen, 1001);
+    std::cout << dg.GetFill().GetStyle() << std::endl;
+
+    samps.push_back(&dg);
 
     DPlot *dp = new DPlot("dp", "dp", 1.0, "el_pt", &samps);
 
