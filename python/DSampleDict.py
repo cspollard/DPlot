@@ -28,31 +28,32 @@ sampdict["DATA"] = DSampleProps("Data", DLine(ROOT.kBlack, 0, 0),
         DMarker(ROOT.kBlack, 20, 1), DFill(ROOT.kBlack, 0))
 
 
-def getprocess(samp):
-    if "Period" in samp or "period" in samp:
+def getprocess(title):
+    if "Period" in title or "period" in title:
         return "DATA"
 
-    elif "ttbar" in samp:
+    elif "ttbar" in title:
         return "TTBAR"
 
-    elif "Wenu" in samp or "Wmunu" in samp or "Wtaunu" in samp or \
-            "Wbb" in samp or "Wc" in samp or "Wcc" in samp:
+    elif "Wenu" in title or "Wmunu" in title or "Wtaunu" in title or \
+            "Wbb" in title or "Wc" in title or "Wcc" in title:
         return "WJETS"
 
-    elif "Zee" in samp or "Zmumu" in samp or "Ztautau" in samp:
+    elif "Zee" in title or "Zmumu" in title or "Ztautau" in title:
         return "ZJETS"
 
-    elif "singletop" in samp or "st_schan" in samp or "st_Wtchan" in samp:
+    elif "singletop" in title or "st_schan" in title or "st_Wtchan" in title:
         return "SINGLETOP"
 
-    elif "WW" in samp or "WZ" in samp or "ZZ" in samp:
+    elif "WW" in title or "WZ" in title or "ZZ" in title:
         return "DIBOSON"
 
-    elif "zprime" in samp or "KKGluon" in samp:
+    elif "zprime" in title or "KKGluon" in title:
         return "SIGNAL"
 
     else:
         return "QCD"
+
 
 def fix_style(title, h):
     t, l, m, f = sampdict[getprocess(title)]
