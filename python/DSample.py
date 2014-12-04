@@ -32,6 +32,12 @@ def build_samples(fnames, cfname, tname):
     mc_samps = []
     for fname in fnames:
         fin = ROOT.TFile.Open(fname)
+
+        if not fin:
+            print "unable to open file", fname
+            stdout.flush()
+            continue
+
         fins.append(fin)
 
         proc = getprocess(fname)
