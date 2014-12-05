@@ -55,8 +55,8 @@ def getprocess(title):
         return "QCD"
 
 
-def fix_style(title, h):
-    t, l, m, f = sampdict[getprocess(title)]
+def fix_style(samp, h):
+    t, l, m, f = sampdict[getprocess(samp.title)]
     h.SetTitle(t)
     setline(h, l)
     setmarker(h, m)
