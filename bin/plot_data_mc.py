@@ -94,14 +94,9 @@ for k in fin.GetListOfKeys():
     sdata = fin.Get("data_" + n)
     smc = fin.Get("mc_" + n)
 
-    if not all(map(lambda h: h and h.IsA().InheritsFrom("THStack"),
+    if not all(map(lambda s: s and s.IsA().InheritsFrom("THStack"),
             [sdata, smc])):
         continue
-
-    ## I changed this for sf plotting...
-    # leg1 = TLegend(0.6, 0.6, 0.75, 0.9)
-    # leg2 = TLegend(0.75, 0.6, 0.9, 0.9)
-    # leg3 = TLegend(0.675, 0.5, 0.825, 0.6)
 
     leg1 = TLegend(0.6, 0.6, 0.75, 0.7)
     leg2 = TLegend(0.75, 0.6, 0.9, 0.7)
@@ -119,8 +114,8 @@ for k in fin.GetListOfKeys():
     leg3.SetBorderSize(0)
     leg3.SetFillStyle(0)
 
+    smc.GetHists()[0].Scale(sf)
     hmc = smc.GetHists()[0].Clone()
-    hmc.Scale(sf)
     hmcerr = GetHistErr(hmc)
     for h in smc.GetHists()[1:]:
         h.Scale(sf)
