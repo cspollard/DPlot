@@ -119,7 +119,7 @@ def make_hist(plots, samp, cut):
         return None
 
 
-    h = project(samp.tree, str(cut), varexp, h, oflows)
+    h = project(samp.chain, str(cut), varexp, h, oflows)
     h.Scale(samp.weight)
 
     fix_style(samp, h)
