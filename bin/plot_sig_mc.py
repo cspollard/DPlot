@@ -173,7 +173,7 @@ for k in fin.GetListOfKeys():
 
     smc.SetMinimum(0.1)
 
-    smc.Draw("ehist")
+    smc.Draw("hist")
     hmc.Draw("e2same")
     ssig.Draw("nostackhistesame")
 
