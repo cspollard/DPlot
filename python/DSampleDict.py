@@ -48,7 +48,7 @@ def getprocess(title):
     elif "WW" in title or "WZ" in title or "ZZ" in title:
         return "DIBOSON"
 
-    elif "zprime" in title or "KKGluon" in title:
+    elif "zprime" in title or "KKGluon" in title or "HVT" in title:
         return "SIGNAL"
 
     else:
