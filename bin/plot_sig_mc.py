@@ -5,13 +5,16 @@ myargv = argv[:]
 argv = []
 
 from ROOT import *
+
+from DUtils import get_hist_uncert, set_hist_uncert
+
 gROOT.SetBatch(1)
 TH1.SetDefaultSumw2()
+
 gStyle.SetOptTitle(0)
 gStyle.SetOptStat(0)
 
 gROOT.SetStyle("Plain")
-
 
 def AddHistQuad(h1, h2):
     h = h1.Clone()
@@ -128,24 +131,20 @@ for k in fin.GetListOfKeys():
 
     pad2.cd()
 
-    hratio = hdata.Clone()
-    hratio.Divide(hmc)
-    hratio.Draw("e")
-
-    hratio.GetYaxis().SetRangeUser(0.5, 1.5)
-    hratio.GetYaxis().SetTitle("(s+b)/b")
-    hratio.GetYaxis().SetLabelSize(0.1)
-    hratio.GetYaxis().SetTitleSize(0.15)
-    hratio.GetYaxis().SetTitleOffset(0.25)
-    hratio.GetYaxis().SetNdivisions(205)
-    hratio.GetXaxis().SetTitle(smc.GetXaxis().GetTitle())
-    hratio.GetXaxis().SetLabelSize(0.1)
-    hratio.GetXaxis().SetTitleSize(0.15)
-    hratio.GetXaxis().SetTitleOffset(0.75)
-    hratio.Draw("e")
-
     hmcratio = hmc.Clone()
     hmcratio.Divide(hmc)
+    hmcratio.Draw("e2")
+
+    hmcratio.GetYaxis().SetRangeUser(0.5, 1.5)
+    hmcratio.GetYaxis().SetTitle("(s+b)/b")
+    hmcratio.GetYaxis().SetLabelSize(0.1)
+    hmcratio.GetYaxis().SetTitleSize(0.15)
+    hmcratio.GetYaxis().SetTitleOffset(0.25)
+    hmcratio.GetYaxis().SetNdivisions(205)
+    hmcratio.GetXaxis().SetTitle(smc.GetXaxis().GetTitle())
+    hmcratio.GetXaxis().SetLabelSize(0.1)
+    hmcratio.GetXaxis().SetTitleSize(0.15)
+    hmcratio.GetXaxis().SetTitleOffset(0.75)
     hmcratio.Draw("e2same")
 
     hsigratios = []
@@ -157,8 +156,8 @@ for k in fin.GetListOfKeys():
         set_hist_uncert(hsigratio, hsigratioerr)
 
 
-    ratioLine = TLine(hratio.GetBinLowEdge(1), 1,
-            hratio.GetBinLowEdge(hratio.GetNbinsX()+1), 1)
+    ratioLine = TLine(hmcratio.GetBinLowEdge(1), 1,
+            hmcratio.GetBinLowEdge(hmcratio.GetNbinsX()+1), 1)
     ratioLine.SetLineColor(kBlack)
     ratioLine.SetLineStyle(7)
     ratioLine.Draw("same")
