@@ -55,15 +55,20 @@ def hist_subtract(h1, h2):
 
     return h1
 
+
+def grouphists(hs, groupfunc=ROOT.TH1.GetTitle):
+        groups = [list(g) for k, g in groupby(sorted(hs, cmp,
+            groupfunc), groupfunc)]
+        return map(sum_hists, groups)
+
+
 def make_stack(name, title, hs, sortfunc=hist_cmp, groupfunc=None):
     s = ROOT.THStack(name, title)
 
     if groupfunc:
-        groups = [list(g) for k, g in groupby(sorted(hs, cmp,
-            groupfunc), groupfunc)]
-        hists = map(sum_hists, groups)
+        hists = grouphists(hs, groupfunc)
     else:
-        hists = map(sum_hists, hs)
+        hists = hs
 
     if sortfunc:
         hists.sort(cmp=sortfunc)
