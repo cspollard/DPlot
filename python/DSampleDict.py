@@ -3,6 +3,30 @@ import ROOT
 
 sampdict = {}
 
+# data
+sampdict["DATA"] = DSampleProps("Data", DLine(ROOT.kBlack, 0, 0),
+        DMarker(ROOT.kBlack, 20, 1), DFill(ROOT.kBlack, 0))
+
+# signal
+sampdict["WH0.5TEVRES"] = DSampleProps("0.5 TeV WH res", DLine(619, 2, 3),
+        DMarker(619, 0, 0), DFill(619, 0))
+
+sampdict["WH1.5TEVRES"] = DSampleProps("1.5 TeV WH res", DLine(ROOT.kRed, 2, 3),
+        DMarker(ROOT.kRed, 0, 0), DFill(ROOT.kRed, 0))
+
+sampdict["WH2.5TEVRES"] = DSampleProps("2.5 TeV WH res", DLine(ROOT.kGreen+3, 2, 3),
+        DMarker(ROOT.kGreen+3, 0, 0), DFill(ROOT.kGreen+3, 0))
+
+sampdict["ZH0.5TEVRES"] = DSampleProps("0.5 TeV ZH res", DLine(ROOT.kBlack, 2, 3),
+        DMarker(ROOT.kBlack, 0, 0), DFill(ROOT.kBlack, 0))
+
+sampdict["ZH1.5TEVRES"] = DSampleProps("1.5 TeV ZH res", DLine(ROOT.kBlue, 2, 3),
+        DMarker(ROOT.kBlue, 0, 0), DFill(ROOT.kBlue, 0))
+
+sampdict["ZH2.5TEVRES"] = DSampleProps("2.5 TeV ZH res", DLine(95, 2, 3),
+        DMarker(95, 0, 0), DFill(95, 0))
+
+# backgrounds
 sampdict["TTBAR"] = DSampleProps("t#bart", DLine(ROOT.kBlack, 1, 1),
         DMarker(ROOT.kRed, 0, 0), DFill(ROOT.kRed, 1001))
 
@@ -18,14 +42,9 @@ sampdict["DIBOSON"] = DSampleProps("Diboson", DLine(ROOT.kBlack, 1, 1),
 sampdict["SINGLETOP"] = DSampleProps("Single Top", DLine(ROOT.kBlack, 1, 1),
         DMarker(62, 0, 0), DFill(62, 1001))
 
-sampdict["SIGNAL"] = DSampleProps("Signal", DLine(ROOT.kBlack, 1, 1),
-        DMarker(619, 0, 0), DFill(619, 1001))
-
 sampdict["QCD"] = DSampleProps("QCD", DLine(ROOT.kBlack, 1, 1),
         DMarker(619, 0, 0), DFill(619, 1001))
 
-sampdict["DATA"] = DSampleProps("Data", DLine(ROOT.kBlack, 0, 0),
-        DMarker(ROOT.kBlack, 20, 1), DFill(ROOT.kBlack, 0))
 
 
 def getprocess(title):
@@ -48,8 +67,27 @@ def getprocess(title):
     elif "WW" in title or "WZ" in title or "ZZ" in title:
         return "DIBOSON"
 
-    elif "zprime" in title or "KKGluon" in title or "HVT" in title:
-        return "SIGNAL"
+    # TODO
+    # UGLY
+    elif "HVT" in title:
+        s = ""
+        if "Wh" in title:
+            s += "WH"
+        elif "Zh" in title:
+            s += "ZH"
+
+        if not s:
+            return "OTHER"
+
+        if "500" in title:
+            return s + "0.5TEVRES"
+        elif "1500" in title:
+            return s + "1.5TEVRES"
+        elif "2500" in title:
+            return s + "2.5TEVRES"
+        else:
+            return "OTHER"
+
 
     else:
         return "QCD"

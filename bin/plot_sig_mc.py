@@ -114,9 +114,9 @@ for k in fin.GetListOfKeys():
 
     pad1.cd()
 
-    smc.Draw("ehist")
+    smc.Draw("hist")
     hmc.Draw("e2same")
-    ssig.Draw("nostacklesame")
+    ssig.Draw("nostackhistesame")
     smc.GetXaxis().SetLabelSize(0)
     smc.GetXaxis().SetTitleSize(0)
     smc.GetXaxis().SetTitle(hmc.GetXaxis().GetTitle())
@@ -147,13 +147,13 @@ for k in fin.GetListOfKeys():
     hmcratio.GetXaxis().SetTitleOffset(0.75)
     hmcratio.Draw("e2same")
 
-    hsigratios = []
     for hsig in list(ssig.GetHists()):
         hsigratio = hsig.Clone()
         hsigratioerr = get_hist_uncert(hsigratio)
         hsigratio.Add(hmc)
         hsigratio.Divide(hmc)
         set_hist_uncert(hsigratio, hsigratioerr)
+        hsigratio.Draw("histesame")
 
 
     ratioLine = TLine(hmcratio.GetBinLowEdge(1), 1,
@@ -175,8 +175,7 @@ for k in fin.GetListOfKeys():
 
     smc.Draw("ehist")
     hmc.Draw("e2same")
-    for h in hsigratios:
-        h.Draw("lesame")
+    ssig.Draw("nostackhistesame")
 
     leg1.Draw()
     leg2.Draw()
