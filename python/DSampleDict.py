@@ -70,21 +70,17 @@ def getprocess(title):
     # TODO
     # UGLY
     elif "HVT" in title:
-        s = ""
         if "Wh" in title:
-            s += "WH"
-        elif "Zh" in title:
-            s += "ZH"
-
-        if not s:
+            s = "WH"
+        else:
             return "OTHER"
 
-        if "500" in title:
-            return s + "0.5TEVRES"
+        if "2500" in title:
+            return s + "2.5TEVRES"
         elif "1500" in title:
             return s + "1.5TEVRES"
-        elif "2500" in title:
-            return s + "2.5TEVRES"
+        elif "500" in title:
+            return s + "0.5TEVRES"
         else:
             return "OTHER"
 

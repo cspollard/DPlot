@@ -11,10 +11,10 @@ from DUtils import get_hist_uncert, set_hist_uncert
 gROOT.SetBatch(1)
 TH1.SetDefaultSumw2()
 
+gROOT.SetStyle("Plain")
+
 gStyle.SetOptTitle(0)
 gStyle.SetOptStat(0)
-
-gROOT.SetStyle("Plain")
 
 def AddHistQuad(h1, h2):
     h = h1.Clone()
@@ -29,7 +29,7 @@ def AddHistQuad(h1, h2):
 fin = TFile(myargv[1])
 outfolder = myargv[2].rstrip("/") + "/"
 
-c = TCanvas("c", "c", 600, 600)
+c = TCanvas("c", "c", 800, 600)
 
 # optionally scale the MC by some number
 if len(myargv) > 3:
@@ -42,7 +42,6 @@ else:
 d = {}
 for k in fin.GetListOfKeys():
     n = "_".join(k.GetName().split("_")[1:])
-    print n; stdout.flush()
 
     if n in d:
         continue
@@ -56,22 +55,6 @@ for k in fin.GetListOfKeys():
     if not all(map(lambda s: s and s.IsA().InheritsFrom("THStack"),
             [ssig, smc])):
         continue
-
-    leg1 = TLegend(0.6, 0.6, 0.75, 0.7)
-    leg2 = TLegend(0.75, 0.6, 0.9, 0.7)
-    leg3 = TLegend(0.675, 0.5, 0.825, 0.6)
-
-    leg1.SetShadowColor(kWhite)
-    leg1.SetBorderSize(0)
-    leg1.SetFillStyle(0)
-
-    leg2.SetShadowColor(kWhite)
-    leg2.SetBorderSize(0)
-    leg2.SetFillStyle(0)
-
-    leg3.SetShadowColor(kWhite)
-    leg3.SetBorderSize(0)
-    leg3.SetFillStyle(0)
 
     smc.GetHists()[0].Scale(sf)
     hmc = smc.GetHists()[0].Clone()
@@ -87,33 +70,39 @@ for k in fin.GetListOfKeys():
     hmc.SetFillColor(kBlack)
     hmc.SetFillStyle(3004)
 
-    l = list(smc.GetHists()) + list(ssig.GetHists())
-    l.reverse()
-    for h in l[:len(l)/2]:
-        leg1.AddEntry(h, h.GetTitle(), "lfe")
-    for h in l[len(l)/2:]:
-        leg2.AddEntry(h, h.GetTitle(), "lfe")
-
     c.Clear()
-    c.Divide(1, 2)
+    c.SetLeftMargin(0.0)
+    c.SetRightMargin(0.0)
 
-    pad1 = c.cd(1)
-    pad1.Clear()
-    pad1.SetPad(0.0, 0.32, 1.0, 1.0)
-    pad1.SetBottomMargin(0.02)
-    pad1.SetLeftMargin(0.15)
-    pad1.SetRightMargin(0.075)
+    # divide into legend and plot pads
+    c.Divide(2, 1)
 
-    pad2 = c.cd(2)
-    pad2.Clear()
-    pad2.SetPad(0.0, 0.05, 1.0, 0.3)
-    pad2.SetTopMargin(0.02)
-    pad2.SetLeftMargin(0.15)
-    pad2.SetRightMargin(0.075)
-    pad2.SetBottomMargin(0.3)
+    # format the pad for the plots
+    plotpad = c.cd(1)
+    plotpad.Clear()
+    plotpad.SetPad(0.0, 0.0, 0.7, 1.0)
 
-    pad1.cd()
+    # divide into main and ratio plots
+    plotpad.Divide(1, 2)
 
+    # set up the ratio pad
+    ratiopad = plotpad.cd(2)
+    ratiopad.Clear()
+    ratiopad.SetPad(0.0, 0.05, 1.0, 0.3)
+    ratiopad.SetTopMargin(0.02)
+    ratiopad.SetLeftMargin(0.15)
+    ratiopad.SetRightMargin(0.075)
+    ratiopad.SetBottomMargin(0.3)
+
+    # set up the main pad
+    mainpad = plotpad.cd(1)
+    mainpad.Clear()
+    mainpad.SetPad(0.0, 0.32, 1.0, 1.0)
+    mainpad.SetBottomMargin(0.02)
+    mainpad.SetLeftMargin(0.15)
+    mainpad.SetRightMargin(0.075)
+
+    # draw stack plot in main pad
     smc.Draw("hist")
     hmc.Draw("e2same")
     ssig.Draw("nostackhistesame")
@@ -124,13 +113,8 @@ for k in fin.GetListOfKeys():
     smc.GetYaxis().SetTitleOffset(1.0)
     smc.GetYaxis().SetTitle(hmc.GetYaxis().GetTitle())
 
-
-    leg1.Draw()
-    leg2.Draw()
-    leg3.Draw()
-
-    pad2.cd()
-
+    # draw ratio plot
+    ratiopad.cd()
     hmcratio = hmc.Clone()
     hmcratio.Divide(hmc)
     hmcratio.Draw("e2")
@@ -147,13 +131,21 @@ for k in fin.GetListOfKeys():
     hmcratio.GetXaxis().SetTitleOffset(0.75)
     hmcratio.Draw("e2same")
 
+    # new ratio plot for each signal
+    # TODO
+    # uncertainties correct?
+    tmp = []
     for hsig in list(ssig.GetHists()):
         hsigratio = hsig.Clone()
         hsigratioerr = get_hist_uncert(hsigratio)
         hsigratio.Add(hmc)
         hsigratio.Divide(hmc)
+        hsigratioerr.Divide(hmc)
         set_hist_uncert(hsigratio, hsigratioerr)
+        tmp.append(hsigratio)
         hsigratio.Draw("histesame")
+
+    tmp
 
 
     ratioLine = TLine(hmcratio.GetBinLowEdge(1), 1,
@@ -162,28 +154,47 @@ for k in fin.GetListOfKeys():
     ratioLine.SetLineStyle(7)
     ratioLine.Draw("same")
 
-    pad1.SetLogy(0)
+
+    # set up and draw the legend
+    legpad = c.cd(2)
+    legpad.SetPad(0.7, 0.12, 1.0, 0.93)
+    legpad.SetLeftMargin(0.0)
+    legpad.SetRightMargin(0.0)
+    legpad.SetBorderSize(0)
+
+    leg = TLegend(0, 0, 1, 1)
+
+    leg.SetShadowColor(kWhite)
+    leg.SetBorderSize(0)
+    leg.SetFillStyle(0)
+
+    l = list(smc.GetHists()) + list(ssig.GetHists())
+    l.reverse()
+    map(lambda h: leg.AddEntry(h, h.GetTitle(), "lfe"), l)
+
+    leg.Draw()
+
+    # save linear plot
+    mainpad.SetLogy(0)
     c.Update()
     c.SaveAs(outfolder + n + ".png")
     c.SaveAs(outfolder + n + ".eps")
+    c.SaveAs(outfolder + n + ".pdf")
     c.SaveAs(outfolder + n + ".C")
 
-    pad1.cd()
-    pad1.SetLogy(1)
-
+    # save log plot
+    mainpad.cd()
+    mainpad.SetLogy(1)
     smc.SetMinimum(0.1)
 
     smc.Draw("hist")
     hmc.Draw("e2same")
     ssig.Draw("nostackhistesame")
 
-    leg1.Draw()
-    leg2.Draw()
-    leg3.Draw()
-
     c.Update()
     c.SaveAs(outfolder + n + "_log.png")
     c.SaveAs(outfolder + n + "_log.eps")
+    c.SaveAs(outfolder + n + "_log.pdf")
     c.SaveAs(outfolder + n + "_log.C")
 
 fin.Close()
