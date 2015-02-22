@@ -64,6 +64,9 @@ for k in fin.GetListOfKeys():
         hmc.Add(h)
         hmcerr = AddHistQuad(hmcerr, get_hist_uncert(h))
 
+    for h in ssig.GetHists():
+        h.Scale(sf)
+
     set_hist_uncert(hmc, hmcerr)
     hmc.SetMarkerStyle(0)
     hmc.SetLineStyle(0)
@@ -168,9 +171,13 @@ for k in fin.GetListOfKeys():
     leg.SetBorderSize(0)
     leg.SetFillStyle(0)
 
-    l = list(smc.GetHists()) + list(ssig.GetHists())
+    l = list(smc.GetHists()) 
     l.reverse()
-    map(lambda h: leg.AddEntry(h, h.GetTitle(), "lfe"), l)
+    map(lambda h: leg.AddEntry(h, h.GetTitle(), "f"), l)
+
+    l = list(ssig.GetHists())
+    l.reverse()
+    map(lambda h: leg.AddEntry(h, h.GetTitle(), "l"), l)
 
     leg.Draw()
 
@@ -185,7 +192,10 @@ for k in fin.GetListOfKeys():
     # save log plot
     mainpad.cd()
     mainpad.SetLogy(1)
-    smc.SetMinimum(0.1)
+    if smc.GetMinimum() < 0.1 or ssig.GetMinimum() < 0.1:
+        smc.SetMinimum(0.1)
+    else:
+        smc.SetMinimum(1)
 
     smc.Draw("hist")
     hmc.Draw("e2same")
