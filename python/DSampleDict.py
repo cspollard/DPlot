@@ -9,17 +9,17 @@ sampdict["DATA"] = DSampleProps("Data", DLine(ROOT.kBlack, 0, 0),
 
 # signal
 
-sampdict["SMWH"] = DSampleProps("SM WH", DLine(ROOT.kBlack, 1, 2),
+sampdict["SMWH"] = DSampleProps("SM WH", DLine(ROOT.kBlack, 1, 3),
         DMarker(ROOT.kBlack, 0, 0), DFill(ROOT.kBlack, 0))
 
-sampdict["WH0.5TEVRES"] = DSampleProps("0.5 TeV WH res", DLine(ROOT.kGray+2, 1, 2),
-        DMarker(ROOT.kGray+2, 0, 0), DFill(ROOT.kGray+2, 0))
+sampdict["WH0.5TEVRES"] = DSampleProps("0.5 TeV WH res", DLine(ROOT.kGray+1, 1, 3),
+        DMarker(ROOT.kGray+1, 0, 0), DFill(ROOT.kGray+1, 0))
 
-sampdict["WH1.5TEVRES"] = DSampleProps("1.5 TeV WH res", DLine(ROOT.kMagenta+1, 1, 2),
-        DMarker(ROOT.kMagenta+1, 0, 0), DFill(ROOT.kMagenta+1, 0))
+sampdict["WH1.5TEVRES"] = DSampleProps("1.5 TeV WH res", DLine(ROOT.kAzure, 1, 3),
+        DMarker(ROOT.kAzure, 0, 0), DFill(ROOT.kAzure, 0))
 
-sampdict["WH2.5TEVRES"] = DSampleProps("2.5 TeV WH res", DLine(ROOT.kGreen+2, 1, 2),
-        DMarker(ROOT.kGreen+2, 0, 0), DFill(ROOT.kGreen+2, 0))
+sampdict["WH2.5TEVRES"] = DSampleProps("2.5 TeV WH res", DLine(ROOT.kGreen+3, 1, 3),
+        DMarker(ROOT.kGreen+3, 0, 0), DFill(ROOT.kGreen+3, 0))
 
 # backgrounds
 sampdict["TTBAR"] = DSampleProps("t#bart", DLine(ROOT.kBlack, 1, 1),
@@ -35,7 +35,7 @@ sampdict["DIBOSON"] = DSampleProps("Diboson", DLine(ROOT.kBlack, 1, 1),
         DMarker(5, 0, 0), DFill(5, 1001))
 
 sampdict["SINGLETOP"] = DSampleProps("Single Top", DLine(ROOT.kBlack, 1, 1),
-        DMarker(62, 0, 0), DFill(62, 1001))
+        DMarker(ROOT.kRed+2, 0, 0), DFill(ROOT.kRed+2, 1001))
 
 sampdict["QCD"] = DSampleProps("QCD", DLine(ROOT.kBlack, 1, 1),
         DMarker(619, 0, 0), DFill(619, 1001))

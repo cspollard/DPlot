@@ -106,6 +106,8 @@ for k in fin.GetListOfKeys():
     mainpad.SetRightMargin(0.075)
 
     # draw stack plot in main pad
+    smc.SetMaximum(max(smc.GetMaximum(), ssig.GetMaximum()))
+
     smc.Draw("hist")
     hmc.Draw("e2same")
     ssig.Draw("nostackhistesame")
