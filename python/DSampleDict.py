@@ -62,8 +62,8 @@ def getprocess(title):
     elif "WW" in title or "WZ" in title or "ZZ" in title:
         return "DIBOSON"
 
-    elif "WH125" in title:
-        return "SMWH"
+    elif "H125" in title:
+        return "SMVH"
 
 
     # TODO
@@ -80,8 +80,11 @@ def getprocess(title):
             return "OTHER"
 
 
-    else:
+    elif "jetjet_JZ" in title:
         return "QCD"
+
+    else:
+        return "UNKNOWN"
 
 
 def fix_style(samp, h):
