@@ -49,29 +49,29 @@ for k in fin.GetListOfKeys():
         d[n] = True
 
     ssig = fin.Get("sig_" + n)
-    smc = fin.Get("mc_" + n)
+    sbkg = fin.Get("bkg_" + n)
 
     # make sure we're only drawing stacks
     if not all(map(lambda s: s and s.IsA().InheritsFrom("THStack"),
-            [ssig, smc])):
+            [ssig, sbkg])):
         continue
 
-    smc.GetHists()[0].Scale(sf)
-    hmc = smc.GetHists()[0].Clone()
-    hmcerr = get_hist_uncert(hmc)
-    for h in smc.GetHists()[1:]:
+    sbkg.GetHists()[0].Scale(sf)
+    hbkg = sbkg.GetHists()[0].Clone()
+    hbkgerr = get_hist_uncert(hbkg)
+    for h in sbkg.GetHists()[1:]:
         h.Scale(sf)
-        hmc.Add(h)
-        hmcerr = AddHistQuad(hmcerr, get_hist_uncert(h))
+        hbkg.Add(h)
+        hbkgerr = AddHistQuad(hbkgerr, get_hist_uncert(h))
 
     for h in ssig.GetHists():
         h.Scale(sf)
 
-    set_hist_uncert(hmc, hmcerr)
-    hmc.SetMarkerStyle(0)
-    hmc.SetLineStyle(0)
-    hmc.SetFillColor(kBlack)
-    hmc.SetFillStyle(3004)
+    set_hist_uncert(hbkg, hbkgerr)
+    hbkg.SetMarkerStyle(0)
+    hbkg.SetLineStyle(0)
+    hbkg.SetFillColor(kBlack)
+    hbkg.SetFillStyle(3004)
 
     c.Clear()
     c.SetLeftMargin(0.0)
@@ -106,35 +106,35 @@ for k in fin.GetListOfKeys():
     mainpad.SetRightMargin(0.075)
 
     # draw stack plot in main pad
-    smc.SetMaximum(max(smc.GetMaximum(), ssig.GetMaximum()))
+    sbkg.SetMaximum(max(sbkg.GetMaximum(), ssig.GetMaximum()))
 
-    smc.Draw("hist")
-    hmc.Draw("e2same")
+    sbkg.Draw("hist")
+    hbkg.Draw("e2same")
     ssig.Draw("nostackhistesame")
-    smc.GetXaxis().SetLabelSize(0)
-    smc.GetXaxis().SetTitleSize(0)
-    smc.GetXaxis().SetTitle(hmc.GetXaxis().GetTitle())
-    smc.GetYaxis().SetTitleSize(0.06)
-    smc.GetYaxis().SetTitleOffset(1.0)
-    smc.GetYaxis().SetTitle(hmc.GetYaxis().GetTitle())
+    sbkg.GetXaxis().SetLabelSize(0)
+    sbkg.GetXaxis().SetTitleSize(0)
+    sbkg.GetXaxis().SetTitle(hbkg.GetXaxis().GetTitle())
+    sbkg.GetYaxis().SetTitleSize(0.06)
+    sbkg.GetYaxis().SetTitleOffset(1.0)
+    sbkg.GetYaxis().SetTitle(hbkg.GetYaxis().GetTitle())
 
     # draw ratio plot
     ratiopad.cd()
-    hmcratio = hmc.Clone()
-    hmcratio.Divide(hmc)
-    hmcratio.Draw("e2")
+    hbkgratio = hbkg.Clone()
+    hbkgratio.Divide(hbkg)
+    hbkgratio.Draw("e2")
 
-    hmcratio.GetYaxis().SetRangeUser(0.5, 1.5)
-    hmcratio.GetYaxis().SetTitle("(s+b)/b")
-    hmcratio.GetYaxis().SetLabelSize(0.1)
-    hmcratio.GetYaxis().SetTitleSize(0.15)
-    hmcratio.GetYaxis().SetTitleOffset(0.25)
-    hmcratio.GetYaxis().SetNdivisions(205)
-    hmcratio.GetXaxis().SetTitle(smc.GetXaxis().GetTitle())
-    hmcratio.GetXaxis().SetLabelSize(0.1)
-    hmcratio.GetXaxis().SetTitleSize(0.15)
-    hmcratio.GetXaxis().SetTitleOffset(0.75)
-    hmcratio.Draw("e2same")
+    hbkgratio.GetYaxis().SetRangeUser(0.5, 1.5)
+    hbkgratio.GetYaxis().SetTitle("(s+b)/b")
+    hbkgratio.GetYaxis().SetLabelSize(0.1)
+    hbkgratio.GetYaxis().SetTitleSize(0.15)
+    hbkgratio.GetYaxis().SetTitleOffset(0.25)
+    hbkgratio.GetYaxis().SetNdivisions(205)
+    hbkgratio.GetXaxis().SetTitle(sbkg.GetXaxis().GetTitle())
+    hbkgratio.GetXaxis().SetLabelSize(0.1)
+    hbkgratio.GetXaxis().SetTitleSize(0.15)
+    hbkgratio.GetXaxis().SetTitleOffset(0.75)
+    hbkgratio.Draw("e2same")
 
     # new ratio plot for each signal
     # TODO
@@ -143,9 +143,9 @@ for k in fin.GetListOfKeys():
     for hsig in list(ssig.GetHists()):
         hsigratio = hsig.Clone()
         hsigratioerr = get_hist_uncert(hsigratio)
-        hsigratio.Add(hmc)
-        hsigratio.Divide(hmc)
-        hsigratioerr.Divide(hmc)
+        hsigratio.Add(hbkg)
+        hsigratio.Divide(hbkg)
+        hsigratioerr.Divide(hbkg)
         set_hist_uncert(hsigratio, hsigratioerr)
         tmp.append(hsigratio)
         hsigratio.Draw("histesame")
@@ -153,8 +153,8 @@ for k in fin.GetListOfKeys():
     tmp
 
 
-    ratioLine = TLine(hmcratio.GetBinLowEdge(1), 1,
-            hmcratio.GetBinLowEdge(hmcratio.GetNbinsX()+1), 1)
+    ratioLine = TLine(hbkgratio.GetBinLowEdge(1), 1,
+            hbkgratio.GetBinLowEdge(hbkgratio.GetNbinsX()+1), 1)
     ratioLine.SetLineColor(kBlack)
     ratioLine.SetLineStyle(7)
     ratioLine.Draw("same")
@@ -173,7 +173,7 @@ for k in fin.GetListOfKeys():
     leg.SetBorderSize(0)
     leg.SetFillStyle(0)
 
-    l = list(smc.GetHists()) 
+    l = list(sbkg.GetHists()) 
     l.reverse()
     map(lambda h: leg.AddEntry(h, h.GetTitle(), "f"), l)
 
@@ -194,13 +194,13 @@ for k in fin.GetListOfKeys():
     # save log plot
     mainpad.cd()
     mainpad.SetLogy(1)
-    if smc.GetMinimum() < 0.1 or ssig.GetMinimum() < 0.1:
-        smc.SetMinimum(0.1)
+    if sbkg.GetMinimum() < 0.1 or ssig.GetMinimum() < 0.1:
+        sbkg.SetMinimum(0.1)
     else:
-        smc.SetMinimum(1)
+        sbkg.SetMinimum(1)
 
-    smc.Draw("hist")
-    hmc.Draw("e2same")
+    sbkg.Draw("hist")
+    hbkg.Draw("e2same")
     ssig.Draw("nostackhistesame")
 
     c.Update()

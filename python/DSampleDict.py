@@ -9,7 +9,7 @@ sampdict["DATA"] = DSampleProps("Data", DLine(ROOT.kBlack, 0, 0),
 
 # signal
 
-sampdict["SMWH"] = DSampleProps("SM WH", DLine(ROOT.kBlack, 1, 3),
+sampdict["SMVH"] = DSampleProps("SM VH", DLine(ROOT.kBlack, 1, 3),
         DMarker(ROOT.kBlack, 0, 0), DFill(ROOT.kBlack, 0))
 
 sampdict["HVT0.5TEVRES"] = DSampleProps("0.5 TeV HVT res", DLine(ROOT.kGray+1, 1, 3),
@@ -53,7 +53,8 @@ def getprocess(title):
             "Wbb" in title or "Wc" in title or "Wcc" in title:
         return "WJETS"
 
-    elif "Zee" in title or "Zmumu" in title or "Ztautau" in title:
+    elif "Zee" in title or "Zmumu" in title or "Ztautau" in title or \
+            "Znunu" in title:
         return "ZJETS"
 
     elif "singletop" in title or "st_schan" in title or "st_Wtchan" in title:
@@ -61,9 +62,6 @@ def getprocess(title):
 
     elif "WW" in title or "WZ" in title or "ZZ" in title:
         return "DIBOSON"
-
-    elif "H125" in title:
-        return "SMVH"
 
 
     # TODO
@@ -77,8 +75,10 @@ def getprocess(title):
         elif "500" in title:
             return s + "0.5TEVRES"
         else:
-            return "OTHER"
+            return "OTHERSIGNAL"
 
+    elif "H125" in title:
+        return "SMVH"
 
     elif "jetjet_JZ" in title:
         return "QCD"
