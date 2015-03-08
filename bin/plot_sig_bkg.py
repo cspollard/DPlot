@@ -147,6 +147,7 @@ for k in fin.GetListOfKeys():
         hmax = max(hmax, ssig.GetMaximum())
     if sdata:
         hmax = max(hmax, sdata.GetMaximum())
+    sbkg.SetMaximum(hmax)
 
     sbkg.Draw("hist")
     hbkg.Draw("e2same")
@@ -246,7 +247,9 @@ for k in fin.GetListOfKeys():
     # save log plot
     mainpad.cd()
     mainpad.SetLogy(1)
-    if sbkg.GetMinimum() < 0.1 or ssig.GetMinimum() < 0.1:
+    if sbkg.GetMinimum() < 0.1:
+        sbkg.SetMinimum(0.1)
+    elif ssig and ssig.GetMinimum() < 0.1:
         sbkg.SetMinimum(0.1)
     else:
         sbkg.SetMinimum(1)
