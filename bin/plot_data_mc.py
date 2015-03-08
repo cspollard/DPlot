@@ -5,31 +5,15 @@ myargv = argv[:]
 argv = []
 
 from ROOT import *
+
+from DUtils import get_hist_uncert, set_hist_uncert
+
 gROOT.SetBatch(1)
 TH1.SetDefaultSumw2()
-gStyle.SetOptTitle(0)
-gStyle.SetOptStat(0)
 
 gROOT.SetStyle("Plain")
-
-
-def GetHistErr(h):
-    herr = h.Clone()
-    herr.SetTitle(herr.GetTitle() + " errors")
-    herr.SetName(herr.GetName() + "_errors")
-
-    for iBin in range(h.GetNbinsX()+2):
-        herr.SetBinContent(iBin, h.GetBinError(iBin))
-
-    return herr
-
-
-def SetHistErr(h, herr):
-    for iBin in range(h.GetNbinsX()+2):
-        h.SetBinError(iBin, herr.GetBinContent(iBin))
-
-    return h
-
+gStyle.SetOptTitle(0)
+gStyle.SetOptStat(0)
 
 def AddHistQuad(h1, h2):
     h = h1.Clone()
@@ -44,7 +28,7 @@ def AddHistQuad(h1, h2):
 fin = TFile(myargv[1])
 outfolder = myargv[2].rstrip("/") + "/"
 
-c = TCanvas("c", "c", 600, 600)
+c = TCanvas("c", "c", 800, 600)
 
 # optionally scale the MC by some number
 if len(myargv) > 3:
@@ -84,7 +68,6 @@ if sf < 0:
 d = {}
 for k in fin.GetListOfKeys():
     n = "_".join(k.GetName().split("_")[1:])
-    print n; stdout.flush()
 
     if n in d:
         continue
