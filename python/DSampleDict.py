@@ -12,6 +12,13 @@ sampdict["DATA"] = DSampleProps("Data", DLine(ROOT.kBlack, 0, 0),
 sampdict["SMVH"] = DSampleProps("SM VH", DLine(ROOT.kBlack, 1, 3),
         DMarker(ROOT.kBlack, 0, 0), DFill(ROOT.kBlack, 0))
 
+sampdict["HVT1TEVRES"] = DSampleProps("1.0 TeV HVT res", DLine(ROOT.kAzure, 1, 3),
+        DMarker(ROOT.kAzure, 0, 0), DFill(ROOT.kAzure, 0))
+
+sampdict["HVT2.0TEVRES"] = DSampleProps("2.0 TeV HVT res", DLine(ROOT.kGreen+3, 1, 3),
+        DMarker(ROOT.kGreen+3, 0, 0), DFill(ROOT.kGreen+3, 0))
+
+"""
 sampdict["HVT0.5TEVRES"] = DSampleProps("0.5 TeV HVT res", DLine(ROOT.kGray+1, 1, 3),
         DMarker(ROOT.kGray+1, 0, 0), DFill(ROOT.kGray+1, 0))
 
@@ -20,6 +27,7 @@ sampdict["HVT1.5TEVRES"] = DSampleProps("1.5 TeV HVT res", DLine(ROOT.kAzure, 1,
 
 sampdict["HVT2.5TEVRES"] = DSampleProps("2.5 TeV HVT res", DLine(ROOT.kGreen+3, 1, 3),
         DMarker(ROOT.kGreen+3, 0, 0), DFill(ROOT.kGreen+3, 0))
+"""
 
 # backgrounds
 sampdict["TTBAR"] = DSampleProps("t#bart", DLine(ROOT.kBlack, 1, 1),
@@ -68,12 +76,10 @@ def getprocess(title):
     # UGLY
     elif "HVT" in title:
         s = "HVT"
-        if "2500" in title:
-            return s + "2.5TEVRES"
+        if "2000" in title:
+            return s + "2.0TEVRES"
         elif "1500" in title:
-            return s + "1.5TEVRES"
-        elif "500" in title:
-            return s + "0.5TEVRES"
+            return s + "1TEVRES"
         else:
             return "OTHERSIGNAL"
 
