@@ -41,7 +41,7 @@ sampdict["QCD"] = DSampleProps("QCD", DLine(ROOT.kBlack, 1, 1),
         DMarker(619, 0, 0), DFill(619, 1001))
 
 # other
-sampdict["UNKNOWN"] = DSampleProps("UNKNOWN", DLine(ROOT.kBlack, 1, 1),
+sampdict["OTHER"] = DSampleProps("OTHER", DLine(ROOT.kBlack, 1, 1),
         DMarker(619, 0, 0), DFill(619, 0))
 
 
@@ -88,7 +88,7 @@ def getprocess(title):
         return "QCD"
 
     else:
-        return "UNKNOWN"
+        return "OTHER"
 
 
 def fix_style(samp, h):
