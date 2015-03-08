@@ -4,7 +4,7 @@ import ROOT
 sampdict = {}
 
 # data
-sampdict["DATA"] = DSampleProps("Data", DLine(ROOT.kBlack, 0, 0),
+sampdict["DATA"] = DSampleProps("data", DLine(ROOT.kBlack, 0, 0),
         DMarker(ROOT.kBlack, 20, 1), DFill(ROOT.kBlack, 0))
 
 # signal
@@ -31,18 +31,18 @@ sampdict["WJETS"] = DSampleProps("W+jets", DLine(ROOT.kBlack, 1, 1),
 sampdict["ZJETS"] = DSampleProps("Z+jets", DLine(ROOT.kBlack, 1, 1),
         DMarker(95, 0, 0), DFill(95, 1001))
 
-sampdict["DIBOSON"] = DSampleProps("Diboson", DLine(ROOT.kBlack, 1, 1),
+sampdict["DIBOSON"] = DSampleProps("diboson", DLine(ROOT.kBlack, 1, 1),
         DMarker(5, 0, 0), DFill(5, 1001))
 
-sampdict["SINGLETOP"] = DSampleProps("Single Top", DLine(ROOT.kBlack, 1, 1),
+sampdict["SINGLETOP"] = DSampleProps("single top", DLine(ROOT.kBlack, 1, 1),
         DMarker(ROOT.kRed+2, 0, 0), DFill(ROOT.kRed+2, 1001))
 
 sampdict["QCD"] = DSampleProps("QCD", DLine(ROOT.kBlack, 1, 1),
         DMarker(619, 0, 0), DFill(619, 1001))
 
 # other
-sampdict["OTHER"] = DSampleProps("OTHER", DLine(ROOT.kBlack, 1, 1),
-        DMarker(619, 0, 0), DFill(619, 0))
+sampdict["OTHER"] = DSampleProps("other", DLine(ROOT.kBlack, 1, 1),
+        DMarker(619, 0, 0), DFill(619, 1001))
 
 
 

@@ -167,10 +167,10 @@ for k in fin.GetListOfKeys():
     ratiopad.cd()
     hbkgratio = hbkg.Clone()
     hbkgratio.Divide(hbkg)
-    hbkgratio.Draw("e2")
+    hbkgratio.Draw()
 
     hbkgratio.GetYaxis().SetRangeUser(0.5, 1.5)
-    hbkgratio.GetYaxis().SetTitle("(s+b)/b")
+    hbkgratio.GetYaxis().SetTitle("ratio")
     hbkgratio.GetYaxis().SetLabelSize(0.1)
     hbkgratio.GetYaxis().SetTitleSize(0.15)
     hbkgratio.GetYaxis().SetTitleOffset(0.25)
@@ -179,7 +179,7 @@ for k in fin.GetListOfKeys():
     hbkgratio.GetXaxis().SetLabelSize(0.1)
     hbkgratio.GetXaxis().SetTitleSize(0.15)
     hbkgratio.GetXaxis().SetTitleOffset(0.75)
-    hbkgratio.Draw("e2same")
+    hbkgratio.Draw("e2")
 
     # new ratio plot for each signal
     if ssig:
@@ -200,7 +200,7 @@ for k in fin.GetListOfKeys():
         hdataratio.Divide(hbkg)
         hdataratioerr.Divide(hbkg)
         set_hist_uncert(hdataratio, hdataratioerr)
-        hdataratio.Draw("e")
+        hdataratio.Draw("esame")
 
 
     ratioLine = TLine(hbkgratio.GetBinLowEdge(1), 1,
