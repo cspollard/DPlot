@@ -12,7 +12,6 @@ gROOT.SetBatch(1)
 TH1.SetDefaultSumw2()
 
 gROOT.SetStyle("Plain")
-
 gStyle.SetOptTitle(0)
 gStyle.SetOptStat(0)
 
@@ -48,13 +47,41 @@ for k in fin.GetListOfKeys():
     else:
         d[n] = True
 
-    ssig = fin.Get("sig_" + n)
     sbkg = fin.Get("bkg_" + n)
+    if not sbkg:
+        print "we must have a stack of background histograms.  continuing."
+        continue
+
+    ssig = fin.Get("sig_" + n)
+    sdata = fin.Get("data_" + n)
 
     # make sure we're only drawing stacks
-    if not all(map(lambda s: s and s.IsA().InheritsFrom("THStack"),
-            [ssig, sbkg])):
+    if not all(map(lambda s: not s or s.IsA().InheritsFrom("THStack"),
+            [ssig, sbkg, sdata])):
+        print "these aren't THStacks. continuing."
         continue
+
+    # TODO
+    # this will normalize each individual histogram...
+    if sf < 0:
+        if not sdata:
+            print "cannot determine scale factor for plot %s: there is no data histogram stack!  continuing." % n
+            continue
+
+        ndata = 0
+        for hdata in sdata.GetHists():
+            ndata += hdata.Integral()
+
+        nbkg = 0
+        for hbkg in sbkg.GetHists():
+            nbkg += hbkg.Integral()
+
+        if not ndata or not nbkg:
+            print "cannot determine scale factor for plot %s: there are no data events!  continuing." % n
+            continue
+
+        sf = float(ndata)/float(nbkg)
+
 
     sbkg.GetHists()[0].Scale(sf)
     hbkg = sbkg.GetHists()[0].Clone()
@@ -64,14 +91,23 @@ for k in fin.GetListOfKeys():
         hbkg.Add(h)
         hbkgerr = AddHistQuad(hbkgerr, get_hist_uncert(h))
 
-    for h in ssig.GetHists():
-        h.Scale(sf)
-
     set_hist_uncert(hbkg, hbkgerr)
     hbkg.SetMarkerStyle(0)
     hbkg.SetLineStyle(0)
     hbkg.SetFillColor(kBlack)
     hbkg.SetFillStyle(3004)
+
+    if sdata:
+        hdata = sdata.GetHists()[0].Clone()
+        hdataerr = get_hist_uncert(hdata)
+        for h in sdata.GetHists()[1:]:
+            hdata.Add(h)
+            hdataerr = AddHistQuad(hdataerr, get_hist_uncert(h))
+
+
+    if ssig:
+        for h in ssig.GetHists():
+            h.Scale(sf)
 
     c.Clear()
     c.SetLeftMargin(0.0)
@@ -106,11 +142,15 @@ for k in fin.GetListOfKeys():
     mainpad.SetRightMargin(0.075)
 
     # draw stack plot in main pad
-    sbkg.SetMaximum(max(sbkg.GetMaximum(), ssig.GetMaximum()))
+    hmax = sbkg.GetMaximum()
+    if ssig:
+        hmax = max(hmax, ssig.GetMaximum())
+    if sdata:
+        hmax = max(hmax, sdata.GetMaximum())
+    sbkg.SetMaximum(hmax)
 
     sbkg.Draw("hist")
     hbkg.Draw("e2same")
-    ssig.Draw("nostackhistesame")
     sbkg.GetXaxis().SetLabelSize(0)
     sbkg.GetXaxis().SetTitleSize(0)
     sbkg.GetXaxis().SetTitle(hbkg.GetXaxis().GetTitle())
@@ -118,14 +158,19 @@ for k in fin.GetListOfKeys():
     sbkg.GetYaxis().SetTitleOffset(1.0)
     sbkg.GetYaxis().SetTitle(hbkg.GetYaxis().GetTitle())
 
+    if ssig:
+        ssig.Draw("nostackhistesame")
+    if sdata:
+       hdata.Draw("esame")
+
     # draw ratio plot
     ratiopad.cd()
     hbkgratio = hbkg.Clone()
     hbkgratio.Divide(hbkg)
-    hbkgratio.Draw("e2")
+    hbkgratio.Draw()
 
     hbkgratio.GetYaxis().SetRangeUser(0.5, 1.5)
-    hbkgratio.GetYaxis().SetTitle("(s+b)/b")
+    hbkgratio.GetYaxis().SetTitle("ratio")
     hbkgratio.GetYaxis().SetLabelSize(0.1)
     hbkgratio.GetYaxis().SetTitleSize(0.15)
     hbkgratio.GetYaxis().SetTitleOffset(0.25)
@@ -134,23 +179,28 @@ for k in fin.GetListOfKeys():
     hbkgratio.GetXaxis().SetLabelSize(0.1)
     hbkgratio.GetXaxis().SetTitleSize(0.15)
     hbkgratio.GetXaxis().SetTitleOffset(0.75)
-    hbkgratio.Draw("e2same")
+    hbkgratio.Draw("e2")
 
     # new ratio plot for each signal
-    # TODO
-    # uncertainties correct?
-    tmp = []
-    for hsig in list(ssig.GetHists()):
-        hsigratio = hsig.Clone()
-        hsigratioerr = get_hist_uncert(hsigratio)
-        hsigratio.Add(hbkg)
-        hsigratio.Divide(hbkg)
-        hsigratioerr.Divide(hbkg)
-        set_hist_uncert(hsigratio, hsigratioerr)
-        tmp.append(hsigratio)
-        hsigratio.Draw("histesame")
-
-    tmp
+    if ssig:
+        for hsig in list(ssig.GetHists()):
+            hsigratio = hsig.Clone()
+            # don't propogate mc uncertainty to signal ratios.
+            hsigratioerr = get_hist_uncert(hsigratio)
+            hsigratio.Add(hbkg)
+            hsigratio.Divide(hbkg)
+            hsigratioerr.Divide(hbkg)
+            set_hist_uncert(hsigratio, hsigratioerr)
+            hsigratio.Draw("histesame")
+    # new ratio plot for data
+    if sdata:
+        hdataratio = hdata.Clone()
+        # don't propogate mc uncertainty to data ratios.
+        hdataratioerr = get_hist_uncert(hdataratio)
+        hdataratio.Divide(hbkg)
+        hdataratioerr.Divide(hbkg)
+        set_hist_uncert(hdataratio, hdataratioerr)
+        hdataratio.Draw("esame")
 
 
     ratioLine = TLine(hbkgratio.GetBinLowEdge(1), 1,
@@ -177,9 +227,12 @@ for k in fin.GetListOfKeys():
     l.reverse()
     map(lambda h: leg.AddEntry(h, h.GetTitle(), "f"), l)
 
-    l = list(ssig.GetHists())
-    l.reverse()
-    map(lambda h: leg.AddEntry(h, h.GetTitle(), "l"), l)
+    if ssig:
+        l = list(ssig.GetHists())
+        l.reverse()
+        map(lambda h: leg.AddEntry(h, h.GetTitle(), "l"), l)
+    if sdata:
+        leg.AddEntry(hdata, hdata.GetTitle(), "p")
 
     leg.Draw()
 
@@ -194,14 +247,19 @@ for k in fin.GetListOfKeys():
     # save log plot
     mainpad.cd()
     mainpad.SetLogy(1)
-    if sbkg.GetMinimum() < 0.1 or ssig.GetMinimum() < 0.1:
+    if sbkg.GetMinimum() < 0.1:
+        sbkg.SetMinimum(0.1)
+    elif ssig and ssig.GetMinimum() < 0.1:
         sbkg.SetMinimum(0.1)
     else:
         sbkg.SetMinimum(1)
 
     sbkg.Draw("hist")
     hbkg.Draw("e2same")
-    ssig.Draw("nostackhistesame")
+    if ssig:
+        ssig.Draw("nostackhistesame")
+    if sdata:
+        hdata.Draw("esame")
 
     c.Update()
     c.SaveAs(outfolder + n + "_log.png")
