@@ -12,7 +12,7 @@ sampdict["DATA"] = DSampleProps("data", DLine(ROOT.kBlack, 0, 0),
 sampdict["SMVH"] = DSampleProps("SM VH", DLine(ROOT.kBlack, 1, 3),
         DMarker(ROOT.kBlack, 0, 0), DFill(ROOT.kBlack, 0))
 
-sampdict["HVT1TEVRES"] = DSampleProps("1.0 TeV HVT res", DLine(ROOT.kAzure, 1, 3),
+sampdict["HVT1.0TEVRES"] = DSampleProps("1.0 TeV HVT res", DLine(ROOT.kAzure, 1, 3),
         DMarker(ROOT.kAzure, 0, 0), DFill(ROOT.kAzure, 0))
 
 sampdict["HVT2.0TEVRES"] = DSampleProps("2.0 TeV HVT res", DLine(ROOT.kGreen+3, 1, 3),
@@ -82,8 +82,8 @@ def getprocess(title):
         s = "HVT"
         if "2000" in title:
             return s + "2.0TEVRES"
-        elif "1500" in title:
-            return s + "1TEVRES"
+        elif "1000" in title:
+            return s + "1.0TEVRES"
         else:
             return "OTHERSIGNAL"
 
