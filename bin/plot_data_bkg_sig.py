@@ -181,8 +181,15 @@ for k in fin.GetListOfKeys():
     hbkgratio.GetXaxis().SetTitleOffset(0.75)
     hbkgratio.Draw("e2")
 
+    ratioLine = TLine(hbkgratio.GetBinLowEdge(1), 1,
+            hbkgratio.GetBinLowEdge(hbkgratio.GetNbinsX()+1), 1)
+    ratioLine.SetLineColor(kBlack)
+    ratioLine.SetLineStyle(7)
+    ratioLine.Draw("same")
+
     # new ratio plot for each signal
     if ssig:
+        ssigratio = THStack()
         for hsig in list(ssig.GetHists()):
             hsigratio = hsig.Clone()
             # don't propogate mc uncertainty to signal ratios.
@@ -191,7 +198,11 @@ for k in fin.GetListOfKeys():
             hsigratio.Divide(hbkg)
             hsigratioerr.Divide(hbkg)
             set_hist_uncert(hsigratio, hsigratioerr)
-            hsigratio.Draw("histesame")
+            ssigratio.Add(hsigratio)
+            continue
+
+        ssigratio.Draw("nostackehistsame")
+
     # new ratio plot for data
     if sdata:
         hdataratio = hdata.Clone()
@@ -202,12 +213,6 @@ for k in fin.GetListOfKeys():
         set_hist_uncert(hdataratio, hdataratioerr)
         hdataratio.Draw("esame")
 
-
-    ratioLine = TLine(hbkgratio.GetBinLowEdge(1), 1,
-            hbkgratio.GetBinLowEdge(hbkgratio.GetNbinsX()+1), 1)
-    ratioLine.SetLineColor(kBlack)
-    ratioLine.SetLineStyle(7)
-    ratioLine.Draw("same")
 
 
     # set up and draw the legend
