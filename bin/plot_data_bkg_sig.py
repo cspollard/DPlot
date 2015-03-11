@@ -151,6 +151,7 @@ for k in fin.GetListOfKeys():
 
     sbkg.Draw("hist")
     hbkg.Draw("e2same")
+    print "Background integral:", hbkg.Integral()
     sbkg.GetXaxis().SetLabelSize(0)
     sbkg.GetXaxis().SetTitleSize(0)
     sbkg.GetXaxis().SetTitle(hbkg.GetXaxis().GetTitle())
@@ -160,8 +161,11 @@ for k in fin.GetListOfKeys():
 
     if ssig:
         ssig.Draw("nostackhistesame")
+        for hsig in ssig.GetHists():
+            print hsig.GetTitle(), "integral:", hsig.Integral()
     if sdata:
-       hdata.Draw("esame")
+        hdata.Draw("esame")
+        print "Data integral:", hdata.Integral()
 
     # draw ratio plot
     ratiopad.cd()
