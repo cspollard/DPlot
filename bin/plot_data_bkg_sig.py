@@ -229,8 +229,10 @@ for k in fin.GetListOfKeys():
     leg = TLegend(0, 0, 1, 1)
 
     leg.SetShadowColor(kWhite)
-    leg.SetBorderSize(0)
+    leg.SetLineColor(kWhite)
     leg.SetFillStyle(0)
+    leg.SetEntrySeparation(0.05)
+    leg.SetMargin(0.15)
 
     l = list(sbkg.GetHists()) 
     l.reverse()
@@ -242,6 +244,8 @@ for k in fin.GetListOfKeys():
         map(lambda h: leg.AddEntry(h, h.GetTitle(), "l"), l)
     if sdata:
         leg.AddEntry(hdata, hdata.GetTitle(), "p")
+
+    leg.SetTextSize(1.0/len(leg.GetListOfPrimitives()))
 
     leg.Draw()
 

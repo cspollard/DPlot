@@ -12,19 +12,19 @@ sampdict["DATA"] = DSampleProps("data", DLine(ROOT.kBlack, 0, 0),
 sampdict["SMVH"] = DSampleProps("SM VH", DLine(ROOT.kGray+1, 1, 3),
         DMarker(ROOT.kGray+1, 0, 0), DFill(ROOT.kGray+1, 0))
 
-sampdict["HVT1.0TEVRES"] = DSampleProps("1.0 TeV HVT res", DLine(ROOT.kAzure, 1, 3),
+sampdict["HVT1.0TEVRES"] = DSampleProps("1.0 TeV HVT", DLine(ROOT.kAzure, 1, 3),
         DMarker(ROOT.kAzure, 0, 0), DFill(ROOT.kAzure, 0))
 
-sampdict["HVT1.5TEVRES"] = DSampleProps("1.5 TeV HVT res", DLine(ROOT.kGreen+3, 1, 3),
+sampdict["HVT1.5TEVRES"] = DSampleProps("1.5 TeV HVT", DLine(ROOT.kGreen+3, 1, 3),
         DMarker(ROOT.kGreen+3, 0, 0), DFill(ROOT.kGreen+3, 0))
 
-sampdict["HVT0.5TEVRES"] = DSampleProps("0.5 TeV HVT res", DLine(ROOT.kGray+1, 1, 3),
+sampdict["HVT0.5TEVRES"] = DSampleProps("0.5 TeV HVT", DLine(ROOT.kGray+1, 1, 3),
         DMarker(ROOT.kGray+1, 0, 0), DFill(ROOT.kGray+1, 0))
 
-sampdict["HVT2.0TEVRES"] = DSampleProps("2.0 TeV HVT res", DLine(ROOT.kBlack, 1, 3),
+sampdict["HVT2.0TEVRES"] = DSampleProps("2.0 TeV HVT", DLine(ROOT.kBlack, 1, 3),
         DMarker(ROOT.kBlack, 0, 0), DFill(ROOT.kBlack, 0))
 
-sampdict["HVT2.5TEVRES"] = DSampleProps("2.5 TeV HVT res", DLine(ROOT.kGray+3, 1, 3),
+sampdict["HVT2.5TEVRES"] = DSampleProps("2.5 TeV HVT", DLine(ROOT.kGray+3, 1, 3),
         DMarker(ROOT.kGray+3, 0, 0), DFill(ROOT.kGray+3, 0))
 
 # backgrounds
