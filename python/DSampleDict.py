@@ -47,24 +47,29 @@ sampdict["OTHER"] = DSampleProps("other", DLine(ROOT.kBlack, 1, 1),
 
 
 def getprocess(title):
-    if "Period" in title or "period" in title:
+    if "Period" in title or "period" in title or \
+            "Egamma" in title or "Muons" in title:
         return "DATA"
 
-    elif "ttbar" in title:
+    # TODO
+    # why are we hacking in dsids?
+    elif "ttbar" in title or "117050" in title:
         return "TTBAR"
 
     elif "Wenu" in title or "Wmunu" in title or "Wtaunu" in title or \
             "Wbb" in title or "Wc" in title or "Wcc" in title:
         return "WJETS"
 
-    elif "Zee" in title or "Zmumu" in title or "Ztautau" in title or \
-            "Znunu" in title:
+    elif "Zjets" in title or "Zee" in title or "Zmumu" in title or \
+            "Ztautau" in title or "Znunu" in title:
         return "ZJETS"
 
-    elif "singletop" in title or "st_schan" in title or "st_Wtchan" in title:
+    elif "singletop" in title or "st_schan" in title or \
+            "st_Wtchan" in title:
         return "SINGLETOP"
 
-    elif "WW" in title or "WZ" in title or "ZZ" in title:
+    elif "diboson" in title or "WW" in title or "WZ" in title or \
+            "ZZ" in title:
         return "DIBOSON"
 
 
