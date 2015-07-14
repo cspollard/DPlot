@@ -4,6 +4,8 @@ from sys import argv, stdout
 myargv = argv[:]
 argv = []
 
+from math import sqrt
+
 from ROOT import *
 
 from DUtils import get_hist_uncert, set_hist_uncert
