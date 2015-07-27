@@ -5,7 +5,6 @@ from sys import stdout
 
 from DUncertain import Uncertain
 from DProject import project
-from DSampleDict import fix_style
 
 import ROOT
 ROOT.TH1.SetDefaultSumw2(True)
@@ -126,8 +125,6 @@ def make_hist(plots, samp, cut):
 
     h = project(samp.chain, str(cut), varexp, h, oflows)
     h.Scale(samp.weight)
-
-    fix_style(samp, h)
 
     return h
 
