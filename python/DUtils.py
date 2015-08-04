@@ -10,6 +10,16 @@ import ROOT
 ROOT.TH1.SetDefaultSumw2(True)
 ROOT.gROOT.SetBatch(True)
 
+def add_hist_quad(h1, h2):
+    h = h1.Clone()
+
+    for iBin in range(h.GetNbinsX()+2):
+        h.SetBinContent(iBin, sqrt(h1.GetBinContent(iBin)**2 +
+                h2.GetBinContent(iBin)**2))
+
+    return h
+
+
 def get_hist_uncert(h):
     herr = h.Clone()
     herr.SetTitle(herr.GetTitle() + " errors")

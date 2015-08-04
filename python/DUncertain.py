@@ -5,6 +5,9 @@ from math import sqrt
 def quadsum(x, y):
     return sqrt(x**2 + y**2)
 
+def uquadsum(x, y):
+    return usqrt(x**2 + y**2)
+
 def usqrt(u):
     if u.x > 0:
         return Uncertain(sqrt(u.x), u.dx/(2*sqrt(u.x)))

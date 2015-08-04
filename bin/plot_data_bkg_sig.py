@@ -8,7 +8,7 @@ from math import sqrt
 
 from ROOT import *
 
-from DUtils import get_hist_uncert, set_hist_uncert
+from DUtils import get_hist_uncert, set_hist_uncert, add_hist_quad
 
 gROOT.SetBatch(1)
 TH1.SetDefaultSumw2()
@@ -16,15 +16,6 @@ TH1.SetDefaultSumw2()
 gROOT.SetStyle("Plain")
 gStyle.SetOptTitle(0)
 gStyle.SetOptStat(0)
-
-def AddHistQuad(h1, h2):
-    h = h1.Clone()
-
-    for iBin in range(h.GetNbinsX()+2):
-        h.SetBinContent(iBin, sqrt(h1.GetBinContent(iBin)**2 +
-                h2.GetBinContent(iBin)**2))
-
-    return h
 
 
 fin = TFile(myargv[1])
@@ -91,7 +82,7 @@ for k in fin.GetListOfKeys():
     for h in sbkg.GetHists()[1:]:
         h.Scale(sf)
         hbkg.Add(h)
-        hbkgerr = AddHistQuad(hbkgerr, get_hist_uncert(h))
+        hbkgerr = add_hist_quad(hbkgerr, get_hist_uncert(h))
 
     set_hist_uncert(hbkg, hbkgerr)
     hbkg.SetMarkerStyle(0)
@@ -104,7 +95,7 @@ for k in fin.GetListOfKeys():
         hdataerr = get_hist_uncert(hdata)
         for h in sdata.GetHists()[1:]:
             hdata.Add(h)
-            hdataerr = AddHistQuad(hdataerr, get_hist_uncert(h))
+            hdataerr = add_hist_quad(hdataerr, get_hist_uncert(h))
 
 
     if ssig:
