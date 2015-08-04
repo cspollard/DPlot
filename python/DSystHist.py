@@ -1,43 +1,39 @@
 import DUtils
 import ROOT
 
+# histogram wrapper class that knows about stat and systematic
+# uncertainties
 class DSystHist:
-    self._name = ""
-    self._title = ""
-
     # nominal holds the statistical uncertainty
     self._nom = None
 
     # systematic histograms
     self._systs = {}
 
-    def __init__(self, name, title, nom, systs):
-        self.name = name
-        self.title = title
-        self.nom = nom
-        self.systs = syst
+    def __init__(self, nom, systs):
+        self._nom = nom
+        self._systs = syst
         return
+
 
     def nominal(self):
         return self._nom
 
+
     def systematics(self):
         return self._systs
 
-    def name(self):
-        return self._name
-
-    def title(self):
-        return self._title
 
     def scale(self, x):
         map(lambda h: h.Scale(x), [self._nom] + self._systs.items())
         return
 
+
     # returns a histogram with the statistical uncertainty on the
     # nominal as entries.
     def statUncert(self):
         return DUtils.get_hist_uncert(self._nom)
+
 
     # returns a histogram with the systematic uncertainty on the
     # nominal as entries.
@@ -48,14 +44,14 @@ class DSystHist:
     def systUncert(self, combFunc=DUtils.add_hist_quad,
             systNames=self._systs.keys()):
 
-        hsyst = self._nom.Clone()
-        hist_subtract(hsyst, self._nom)
+        hsystuncert = self._nom.Clone()
+        hsystuncert.Reset()
         for k in systNames:
             h = self._systs[k].Clone()
-            DUtils.hist_subtract(h, self_nom)
-            hsyst = combFunc(hsyst, h)
+            DUtils.hist_subtract(h, self._nom)
+            hsystuncert = combFunc(hsystuncert, h)
 
-        return hsyst
+        return hsystuncert
 
 
     # returns a histogram with the systematic+statistical uncertainty
@@ -77,6 +73,9 @@ class DSystHist:
         return statSystcombFunc(hsystuncert, hstatuncert)
 
 
+    self.nomStatUncert = self.nominal
+
+
     # returns a histogram with nominal entries and systematic
     # uncertainty.
     # by default combine systematics using quadrature sum, but you can
@@ -92,7 +91,6 @@ class DSystHist:
 
         return hnom
 
-    self.nomStatUncert = self.nominal
 
     # returns a histogram with nominal entries and the
     # systematic+statistical uncertainty.
