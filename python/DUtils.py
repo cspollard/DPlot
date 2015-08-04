@@ -57,6 +57,12 @@ def sum_hists(hs, name=None, title=None):
     h1, hs1 = hs[0].Clone(), hs[1:]
     map(h1.Add, hs1)
 
+    if name:
+        h1.SetName(name)
+
+    if title:
+        h1.SetTitle(title)
+
     return h1
 
 def hist_subtract(h1, h2):
