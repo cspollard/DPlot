@@ -67,7 +67,7 @@ for k in fin.GetListOfKeys():
     # this will normalize each individual histogram...
     if sf < 0:
         if not sdata:
-            print "cannot determine scale factor for plot %s: there is no data histogram stack!  continuing." % n
+            print "cannot determine scale factor for plot %s: there is no data histogram stack! continuing." % n
             continue
 
         ndata = 0
@@ -79,7 +79,7 @@ for k in fin.GetListOfKeys():
             nbkg += hbkg.Integral()
 
         if not ndata or not nbkg:
-            print "cannot determine scale factor for plot %s: there are no data events!  continuing." % n
+            print "cannot determine scale factor for plot %s: there are no data events! continuing." % n
             continue
 
         sf = float(ndata)/float(nbkg)
