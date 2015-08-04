@@ -17,21 +17,25 @@ class DSystStack:
 
 
     def nominal(self):
-        return self._nom
+        return self._nom.Clone()
 
 
-    def nomHist(self):
-        return sum_hists(list(self._nom.GetHist()))
+    self.nomHist = self.nomHistStatUncert
 
 
-    def systematics(self):
-        return self._systs
+    def systematics(self, systNames=self._systs.keys()):
+        d = {}
+        for k in systNames:
+            d[k] = self._systs[k]
+            continue
+
+        return d
 
 
     def systHists(self, systNames=self._systs.keys()):
         d = {}
         for k in systNames:
-            d[k] = sum_hists(list(self._systs[k].GetHists()))
+            d[k] = sum_hists(self._systs[k].GetHists())
             continue
 
         return d
@@ -50,7 +54,7 @@ class DSystStack:
     def statUncert(self, combFunc=DUtils.add_hist_quad):
 
         hstatuncert = DUtils.get_hist_uncert(self._nom.GetHists().At(0))
-        for h in list(self._nom.GetHist())[1:]:
+        for h in self._nom.GetHist()[1:]:
             huncert = DUtils.get_hist_uncert(h)
             hstatuncert = combFunc(hstatuncert, huncert)
             continue
@@ -86,20 +90,24 @@ class DSystStack:
         return statSystcombFunc(hsystuncert, hstatuncert)
 
 
-    self.nomStatUncert = self.nominal
+    def nomHistStatUncert(self, combFunc=DUtils.add_hist_quad):
+        hnom = self.nomHist()
+        set_hist_uncert(hnom, self.statUncert(combFunc=combFunc))
+
+        return hnom
 
 
-    def nomSystUncert(self, combFunc=DUtils.add_hist_quad,
+    def nomHistSystUncert(self, combFunc=DUtils.add_hist_quad,
             systNames=self._systs.keys()):
 
-        hnom = self._nom.Clone()
+        hnom = self.nomHist()
         set_hist_uncert(hnom, self.systUncert(combFunc=combFunc,
             systNames=systNames))
 
         return hnom
 
 
-    def nomStatSystUncert(self, statCombFunc=DUtils.add_hist_quad,
+    def nomHistStatSystUncert(self, statCombFunc=DUtils.add_hist_quad,
             systCombFunc=DUtils.add_hist_quad,
             statSystCombFunc=DUtils.add_hist_quad,
             systNames=self._systs.keys()):
