@@ -59,7 +59,10 @@ class DSystStack:
     # can provide your own histogram-combining function.
     def statUncert(self, combFunc=add_hist_quad):
 
-        hstatuncert = get_hist_uncert(self._nom.GetHists().At(0))
+        # TODO
+        # this will fail for stacks with no histograms.
+        hstatuncert = self.nominal().GetHists().At(0).Clone()
+        hstatuncert.Reset()
         for h in self._nom.GetHists():
             huncert = get_hist_uncert(h)
             hstatuncert = combFunc(hstatuncert, huncert)

@@ -363,3 +363,14 @@ def norm_to_hist_bins(hs, hnorm):
         scale_by_uncertain(h, norm)
 
     return hs
+
+def hist_ratio_no_denom_uncert(hnum, hdenom):
+    hratio = hnum.Clone()
+    hratiouncert = get_hist_uncert(hnum)
+
+    hratio.Divide(hdenom)
+    hratiouncert.Divide(hdenom)
+
+    set_hist_uncert(hratio, hratiouncert)
+
+    return hratio
