@@ -99,7 +99,7 @@ class DSystStack:
         hsystuncert = self.systUncert(combFunc=systCombFunc,
                 systNames=systNames)
         hstatuncert = self.statUncert(combFunc=statCombFunc)
-        return statSystcombFunc(hsystuncert, hstatuncert)
+        return statSystCombFunc(hsystuncert, hstatuncert)
 
 
     def nomHistStatUncert(self, combFunc=add_hist_quad):
