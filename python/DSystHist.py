@@ -78,7 +78,7 @@ class DSystHist:
 
 
     def nomStatUncert(self):
-        return self.nominal()
+        return self.nominal().Clone()
 
 
     # returns a histogram with nominal entries and systematic
