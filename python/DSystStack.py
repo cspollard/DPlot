@@ -13,8 +13,7 @@ class DSystStack:
 
 
     def nominal(self):
-        # TODO
-        # can't make clones of THStack?
+        # can't make clones of THStack???
         return self._nom
 
 
@@ -132,10 +131,11 @@ class DSystStack:
             systNames = self._systs.keys()
 
         hnom = self.nomHist()
-        hsystuncert = self.systUncert(combFunc=systCombFunc,
+        huncert = self.statSystUncert(statCombFunc=statCombFunc,
+                systCombFunc=systCombFunc,
+                statSystCombFunc=statSystCombFunc,
                 systNames=systNames)
-        hstatuncert = self.statUncert(combFunc=statCombFunc)
-        set_hist_uncert(hnom,
-                statSystCombFunc(hsystuncert, hstatuncert))
+
+        set_hist_uncert(hnom, huncert)
 
         return hnom
