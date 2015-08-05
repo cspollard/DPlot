@@ -1,4 +1,5 @@
-import DUtils
+from DUtils import sum_hists, add_hist_quad, get_hist_uncert, \
+        set_hist_uncert, hist_subtract
 import ROOT
 
 # histogram wrapper class that knows about stat and systematic
@@ -9,7 +10,7 @@ class DSystHist:
         self._nom = nom
 
         # systematic histograms
-        self._systs = syst
+        self._systs = systs
         return
 
 
@@ -22,14 +23,14 @@ class DSystHist:
 
 
     def scale(self, x):
-        map(lambda h: h.Scale(x), [self._nom] + self._systs.items())
+        map(lambda h: h.Scale(x), [self._nom] + self._systs.values())
         return
 
 
     # returns a histogram with the statistical uncertainty on the
     # nominal as entries.
     def statUncert(self):
-        return DUtils.get_hist_uncert(self._nom)
+        return get_hist_uncert(self._nom)
 
 
     # returns a histogram with the systematic uncertainty on the
@@ -38,7 +39,7 @@ class DSystHist:
     # provide your own histogram-combining function.
     # by default all systematics are included, but you can specify
     # which should be.
-    def systUncert(self, combFunc=DUtils.add_hist_quad,
+    def systUncert(self, combFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:
@@ -48,7 +49,7 @@ class DSystHist:
         hsystuncert.Reset()
         for k in systNames:
             h = self._systs[k].Clone()
-            DUtils.hist_subtract(h, self._nom)
+            hist_subtract(h, self._nom)
             hsystuncert = combFunc(hsystuncert, h)
 
         return hsystuncert
@@ -63,8 +64,8 @@ class DSystHist:
     # histogram-combining function.
     # by default all systematics are included, but you can specify
     # which should be.
-    def statSystUncert(self, systCombFunc=DUtils.add_hist_quad,
-            statSystCombFunc=DUtils.add_hist_quad,
+    def statSystUncert(self, systCombFunc=add_hist_quad,
+            statSystCombFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:
@@ -86,7 +87,7 @@ class DSystHist:
     # provide your own histogram-combining function.
     # by default all systematics are included, but you can specify
     # which should be.
-    def nomSystUncert(self, combFunc=DUtils.add_hist_quad,
+    def nomSystUncert(self, combFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:
@@ -108,8 +109,8 @@ class DSystHist:
     # histogram-combining function.
     # by default all systematics are included, but you can specify
     # which should be.
-    def nomStatSystUncert(self, systCombFunc=DUtils.add_hist_quad,
-            statSystCombFunc=DUtils.add_hist_quad,
+    def nomStatSystUncert(self, systCombFunc=add_hist_quad,
+            statSystCombFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:

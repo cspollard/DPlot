@@ -1,5 +1,6 @@
 from DSystHist import DSystHist
-import DUtils
+from DUtils import sum_hists, add_hist_quad, get_hist_uncert, \
+        set_hist_uncert, hist_subtract
 import ROOT
 
 # histogram stack wrapper class that knows about stat and systematic
@@ -12,10 +13,12 @@ class DSystStack:
 
 
     def nominal(self):
-        return self._nom.Clone()
+        # TODO
+        # can't make clones of THStack?
+        return self._nom
 
 
-    def nomHist(self, combFunc=DUtils.add_hist_quad):
+    def nomHist(self, combFunc=add_hist_quad):
         return self.nomHistStatUncert(combFunc)
 
 
@@ -46,8 +49,8 @@ class DSystStack:
 
 
     def scale(self, x):
-        for s in [self._nom] + self._systs.items():
-            map(lambda h: h.Scale(x), s.Gethists())
+        for s in [self._nom] + self._systs.values():
+            map(lambda h: h.Scale(x), s.GetHists())
         return
 
 
@@ -55,40 +58,40 @@ class DSystStack:
     # nominal as the entries.
     # by default combine uncertainties using quadrature sum, but you
     # can provide your own histogram-combining function.
-    def statUncert(self, combFunc=DUtils.add_hist_quad):
+    def statUncert(self, combFunc=add_hist_quad):
 
-        hstatuncert = DUtils.get_hist_uncert(self._nom.GetHists().At(0))
-        for h in self._nom.GetHist()[1:]:
-            huncert = DUtils.get_hist_uncert(h)
+        hstatuncert = get_hist_uncert(self._nom.GetHists().At(0))
+        for h in self._nom.GetHists():
+            huncert = get_hist_uncert(h)
             hstatuncert = combFunc(hstatuncert, huncert)
             continue
 
         return hstatuncert
 
 
-    def systUncert(self, combFunc=DUtils.add_hist_quad,
+    def systUncert(self, combFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:
             systNames = self._systs.keys()
 
-        hnom = self.nominalHist()
+        hnom = self.nomHist()
         hsystuncert = hnom.Clone()
-        hsysuncert.Reset()
+        hsystuncert.Reset()
 
         d = self.systHists(systNames=systNames)
         for k in systNames:
             h = d[k].Clone()
-            DUtils.hist_subtract(h, hnom)
+            hist_subtract(h, hnom)
             hsystuncert = combFunc(hsystuncert, h)
             continue
 
         return hsystuncert
 
 
-    def statSystUncert(self, statCombFunc=DUtils.add_hist_quad,
-            systCombFunc=DUtils.add_hist_quad,
-            statSystCombFunc=DUtils.add_hist_quad,
+    def statSystUncert(self, statCombFunc=add_hist_quad,
+            systCombFunc=add_hist_quad,
+            statSystCombFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:
@@ -100,14 +103,14 @@ class DSystStack:
         return statSystcombFunc(hsystuncert, hstatuncert)
 
 
-    def nomHistStatUncert(self, combFunc=DUtils.add_hist_quad):
-        hnom = self.nomHist()
+    def nomHistStatUncert(self, combFunc=add_hist_quad):
+        hnom = sum_hists(self.nominal().GetHists())
         set_hist_uncert(hnom, self.statUncert(combFunc=combFunc))
 
         return hnom
 
 
-    def nomHistSystUncert(self, combFunc=DUtils.add_hist_quad,
+    def nomHistSystUncert(self, combFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:
@@ -120,15 +123,15 @@ class DSystStack:
         return hnom
 
 
-    def nomHistStatSystUncert(self, statCombFunc=DUtils.add_hist_quad,
-            systCombFunc=DUtils.add_hist_quad,
-            statSystCombFunc=DUtils.add_hist_quad,
+    def nomHistStatSystUncert(self, statCombFunc=add_hist_quad,
+            systCombFunc=add_hist_quad,
+            statSystCombFunc=add_hist_quad,
             systNames=None):
 
         if systNames == None:
             systNames = self._systs.keys()
 
-        hnom = self._nom.Clone()
+        hnom = self.nomHist()
         hsystuncert = self.systUncert(combFunc=systCombFunc,
                 systNames=systNames)
         hstatuncert = self.statUncert(combFunc=statCombFunc)
