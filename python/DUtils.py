@@ -5,6 +5,7 @@ from sys import stdout
 
 from DUncertain import Uncertain
 from DProject import project
+from DCut import DCut
 
 import ROOT
 ROOT.TH1.SetDefaultSumw2(True)
@@ -139,8 +140,7 @@ def make_hist(plots, samp, cut):
         return None
 
 
-    h = project(samp.chain, str(cut), varexp, h, oflows)
-    h.Scale(samp.weight)
+    h = project(samp.chain, str(DCut(str(cut))*DCut(str(samp.weight))), varexp, h, oflows)
 
     return h
 
